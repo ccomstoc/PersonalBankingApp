@@ -1,10 +1,10 @@
 import { ChangeDetectorRef, Component, inject, signal } from '@angular/core';
-import { Transaction } from '../models/transaction.type';
-import { TransactionService } from '../services/transaction.service';
+import { Transaction } from '../../models/transaction.type';
+import { TransactionService } from '../../services/transaction.service';
 import { catchError } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { UserService } from '../services/user.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-transaction-list',
@@ -13,16 +13,22 @@ import { UserService } from '../services/user.service';
   styleUrl: './transaction-list.component.css'
 })
 export class TransactionListComponent {
-  inputValue:number = 1;
-  transactionService = inject(TransactionService);
+
+  //Dependencies
   userService = inject(UserService)
   changeDetect = inject(ChangeDetectorRef);
+  transactionService = inject(TransactionService);
+
+  //twoWayDataBinding
+  inputValue:number = 1;
+  
+  //Signals
   transactions = signal<Array<Transaction>>([]);
   balance = signal<number>(0);
 
   buttonPress(){
     this.updateBalence();
-    this.updateTransaction();
+    this.updateTransaction();//new
 
   }
 

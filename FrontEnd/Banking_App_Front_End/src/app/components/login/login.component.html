@@ -1,0 +1,30 @@
+<p>login works!</p>
+<div class="container">
+    <div>
+      <div class="text-container">
+        <h1>Log In</h1>
+        
+        <div class="input-container">
+          <!-- Two-way binding for the username -->
+          <input
+            type="text"
+            placeholder="username"
+            name="username"
+            [(ngModel)]="username" />
+        </div>
+  
+        <div class="input-container">
+          <!-- Two-way binding for the password -->
+          <input
+            type="password"
+            placeholder="password"
+            name="password"
+            [(ngModel)]="password" />
+        </div>
+  
+        <!-- Using Bootstrap button classes -->
+        <button type="button" class="btn btn-dark login-button" (click)="login()">Login</button>
+        <button type="button" class="btn btn-dark login-button" (click)="createAccount()">Create Account</button>
+      </div>
+    </div>
+  </div>
