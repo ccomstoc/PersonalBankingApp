@@ -32,7 +32,7 @@ export class LoginComponent {
       throw err;
     })).subscribe((user) => {
       if(user.status != 401 ){//If the responce is a success, set global user
-          this.authService.loggedInUser =user.body;
+          this.authService.setLoggedInUser(user.body)
           console.log("Navigating")
           this.router.navigate(['/transaction']);
       }
