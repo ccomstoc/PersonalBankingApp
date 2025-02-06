@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, Signal } from '@angular/core';
 import { TransactionService } from '../../services/transaction.service';
 import { FormsModule } from '@angular/forms';
 
@@ -6,6 +6,7 @@ import {TransactionDTO} from '../../models/TransactionDTO.type'
 import { catchError } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import { User } from '../../models/User.type';
 
 @Component({
   selector: 'app-create-transaction',
@@ -14,19 +15,14 @@ import { Router } from '@angular/router';
   styleUrl: './create-transaction.component.css'
 })
 export class CreateTransactionComponent {
-    transactionService = inject(TransactionService);
-    authService = inject(AuthService)
-    router = inject(Router)
 
-
-    loggedInUser = this.authService.getCurrentUser()
+    @Output() createTransactionEvent = new EventEmitter<TransactionDTO>;
+    @Input() currentUser!: Signal<User>
 
     date = new Date().toISOString().split('T')[0];
     description!:string;
     amount!:number;
     isPaid:boolean = false;
-
-
 
     createTransaction(){
       if(this.description && this.amount){
@@ -35,25 +31,13 @@ export class CreateTransactionComponent {
             amount:this.amount,
             date:this.date,
             //isPaid:this.isPaid,
-            userId:this.loggedInUser.userId
+            userId:this.currentUser().userId
 
           };
-          console.log(transaction);
-          
-          this.transactionService.createTransaction(transaction)
-          .pipe(catchError((err) => {
-            console.log(err);
-            throw err;
-          })).subscribe((newTransaction) => {
-            console.log(newTransaction);
-            
-          })
-          
-          //hard reload, look into other solutions
-          window.location.reload()
-          
+          this.createTransactionEvent.emit(transaction);
+        
       } else { 
-        //Show error 
+        //TODO: Error handle for invalid entry
       }
     }
 }

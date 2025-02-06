@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, inject, Input, OnInit, Output, Signal, signal } from '@angular/core';
 import { TransactionService } from '../../services/transaction.service';
 import { catchError, Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -19,79 +19,14 @@ import { authGuard } from '../../gaurds/auth.guard';
   templateUrl: './transaction-list.component.html',
   styleUrl: './transaction-list.component.css'
 })
-export class TransactionListComponent implements OnInit {
+export class TransactionListComponent {
 
-  //Dependencies
-  userService = inject(UserService);
-  authService = inject(AuthService);
-  changeDetect = inject(ChangeDetectorRef);
-  transactionService = inject(TransactionService);
-
-  //twoWayDataBinding
-  inputValue!:number
-
-
-  currentUser: User = this.authService.getCurrentUser();
-  private subscription!: Subscription;
+  @Output() payTransactionEvent = new EventEmitter<number>();
+  @Input() transactions!: Signal<Array<Transaction>>;
+  @Input() balance!: Signal<number>;
   
-  //Signals
-  transactions = signal<Array<Transaction>>([]);
-  balance = signal<number>(0);
-  userId = signal<number>(1)
-  
-
-  buttonPress(){
-    this.updateBalence();
-    this.updateTransaction();//new
-
-  }
 
   payTransaction(id:number){
-    this.transactionService.payTransaction(id).pipe(
-      catchError((err) => {
-        console.log(err);
-        throw err;
-      })//Comment
-    ).subscribe((newBalance) => {
-      this.updateTransaction();
-      this.balance.set(newBalance);
-
-    });
-
-    
+    this.payTransactionEvent.emit(id);
   }
-
-  updateBalence(){
-
-
-    this.userService.getUserById(this.currentUser.userId).pipe(catchError((err) => {
-      console.log(err);
-      throw err;
-    })).subscribe((user) => {
-      this.balance.set(user.balance)
-    });
-  }
-
-  updateTransaction(){
-
-    this.transactionService.getAllTransactions(this.currentUser.userId).pipe(
-      catchError((err) => {
-        console.log(err);
-        throw err;
-      })
-    ).subscribe((returnedTransactions) => {
-      this.transactions.set(returnedTransactions);
-    })
-
-  }
-
-    ngOnInit(): void {  
-
-
-    this.updateTransaction();
-    this.updateBalence();
-
-  }
-
-
 }
