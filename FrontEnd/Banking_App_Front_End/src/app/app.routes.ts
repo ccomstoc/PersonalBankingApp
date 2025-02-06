@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './gaurds/auth.guard';
 
+
 export const routes: Routes = [{
     path: 'login',
     //pathMatch:'full', //required if using empty route
@@ -9,10 +10,15 @@ export const routes: Routes = [{
         return import('./components/login/login.component').then((m) => m.LoginComponent);
     }},
     {
-    path:'transaction',
+    path:'home',
     canActivate:[authGuard],
     loadComponent: () => {
-            return import('./components/transaction-list/transaction-list.component').then((m) => m.TransactionListComponent);
+            return import('./components/home/home.component').then((m) => m.HomeComponent);
         }
+    },{
+        path: '', 
+        redirectTo: '/home', 
+        pathMatch: 'full' 
     }
+    
 ];

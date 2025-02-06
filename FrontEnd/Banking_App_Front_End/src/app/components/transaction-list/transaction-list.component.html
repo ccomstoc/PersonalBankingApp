@@ -1,9 +1,9 @@
-<app-nav-bar></app-nav-bar>
+
 <div>
     <p>Balance: {{balance()}}</p>
 
 </div>
-<div class="d-flex justify-content-center px-5 ">
+<div class="px-1 ">
     <table class="table table-hover table-dark">
         <thead>
           <tr>
@@ -22,7 +22,7 @@
             <td >{{row.date}}</td>
             <td >{{row.amount}}</td>
             <td >{{row.description}}</td>
-            <td *ngIf = "row.paid">Paid</td>
+            <td *ngIf = "row.paid">Paid on: {{row.paidOn}}</td>
             <td *ngIf = "!row.paid">
                 <button (click) = "payTransaction(row.transactionId)">Pay</button>
 

@@ -4,9 +4,10 @@ import { TransactionListComponent } from "./components/transaction-list/transact
 import { CommonModule } from '@angular/common';
 import { LoginComponent } from './components/login/login.component';
 
+
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet,CommonModule],
+  imports: [RouterOutlet, CommonModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

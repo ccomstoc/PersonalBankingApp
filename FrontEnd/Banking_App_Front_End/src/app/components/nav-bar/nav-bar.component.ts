@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { User } from '../../models/User.type';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
-import { BaseUserComponent } from '../base-user/base-user.component';
+
 
 @Component({
   selector: 'app-nav-bar',
@@ -10,15 +10,13 @@ import { BaseUserComponent } from '../base-user/base-user.component';
   templateUrl: './nav-bar.component.html',
   styleUrl: './nav-bar.component.css'
 })
-export class NavBarComponent extends BaseUserComponent implements OnInit{
+export class NavBarComponent{
 
-  override ngOnInit(): void {
-      super.ngOnInit()
-
-  }
+  authSerice = inject(AuthService)
+  loggedInUser = this.authSerice.getCurrentUser();
 
   logout(){
-    this.authService.logout()
+    this.authSerice.logout();
   }
 
   

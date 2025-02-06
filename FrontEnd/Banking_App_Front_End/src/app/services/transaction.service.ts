@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Transaction } from '../models/Transaction.type';
+import { TransactionDTO } from '../models/TransactionDTO.type';
 
 
 @Injectable({
@@ -17,6 +18,11 @@ export class TransactionService {
   payTransaction(transactionId:number){
     let url:string = "http://localhost:8080/transaction/pay/" + transactionId;
     return this.http.put<number>(url,null);
+  }
+
+  createTransaction(transaction:TransactionDTO){
+    let url:string = "http://localhost:8080/transaction" ;
+    return this.http.post(url,transaction);
   }
 
 }

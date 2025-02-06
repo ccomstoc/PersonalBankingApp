@@ -11,21 +11,29 @@ import { Router } from '@angular/router';
 })
 export class AuthService {
 
-  private loggedInUserSubject: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
-  public loggedInUser$: Observable<User | null> = this.loggedInUserSubject.asObservable();
+  
 
-  setLoggedInUser(user: User | null): void {
-    this.loggedInUserSubject.next(user);
-  }
+
 
 
   //Dependencies
   router = inject(Router);
   http = inject(HttpClient);
 
+  getCurrentUser(): User{
+
+    const storedUser = localStorage.getItem("user");
+    if(storedUser)
+      return JSON.parse(storedUser);
+    else
+      throw Error("Tried to access null user from AuthService");
+
+
+  }
+
   logout(){
     this.router.navigate(["/login"]);
-    this.loggedInUserSubject.next(null);
+    localStorage.removeItem("user");
   }
 
 
