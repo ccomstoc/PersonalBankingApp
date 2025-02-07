@@ -12,6 +12,7 @@ import { TransactionListComponent } from "../transaction-list/transaction-list.c
 import { CreateTransactionComponent } from "../create-transaction/create-transaction.component";
 import { MakeDepositComponent } from "../make-deposit/make-deposit.component";
 import { TransactionDTO } from '../../models/TransactionDTO.type';
+import { UpdateUserDTO } from '../../models/UpdateUserDTO.type';
 
 @Component({
   selector: 'app-home',
@@ -36,7 +37,6 @@ export class HomeComponent implements OnInit {
   //Signals
   transactions = signal<Array<Transaction>>([]);
   balance = signal<number>(0);
-  userId = signal<number>(1);
   currentUser = signal<User>(this.authService.getCurrentUser());
 
   ngOnInit(): void {  
@@ -82,6 +82,11 @@ export class HomeComponent implements OnInit {
     })
 
   }
+  updateUserDependents(){
+    this.authService.refreshCurrentUser(() => {
+      this.currentUser.set(this.authService.getCurrentUser())
+    })
+  }
 
   createTransaction(transaction:TransactionDTO){
     this.transactionService.createTransaction(transaction)
@@ -97,7 +102,26 @@ export class HomeComponent implements OnInit {
           })
   }
 
+  makeDeposit(amount:number){
     
+
+    const updatedUser = {
+      userId:this.currentUser().userId,
+      amount:amount
+    }
+    console.log("New User in home comp" + updatedUser)
+    this.userService.makeDeposit(updatedUser).pipe(catchError((err) => {
+      console.log(err);
+      throw err;
+    })).subscribe((newUser) => {
+      this.authService.setCurrentUser(newUser);
+      this.currentUser.set(newUser);
+    })
+  }
+
+    
+
+
 
 
 }

@@ -22,8 +22,9 @@ import { authGuard } from '../../gaurds/auth.guard';
 export class TransactionListComponent {
 
   @Output() payTransactionEvent = new EventEmitter<number>();
+  @Input() currentUser!: Signal<User>
   @Input() transactions!: Signal<Array<Transaction>>;
-  @Input() balance!: Signal<number>;
+
   
 
   payTransaction(id:number){

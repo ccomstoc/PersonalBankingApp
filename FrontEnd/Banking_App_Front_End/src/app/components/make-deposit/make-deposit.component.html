@@ -1,9 +1,9 @@
 
 <h1>Make Deposit</h1>
-<form>
+
     <div class="form-group col-md-6">
         <label for="inputAmount">Amount</label>
-        <input type="number" class="form-control" id="inputAmount" placeholder="Amount">
+        <input type="number" class="form-control" id="inputAmount" placeholder="Amount" [(ngModel)] = "depositAmount">
     </div>
-    <button class="btn btn-outline-success">Deposit</button>
-</form>
+    <button class="btn btn-outline-success" (click)="makeDeposit()">Deposit</button>
+

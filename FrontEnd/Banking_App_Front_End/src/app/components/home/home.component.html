@@ -2,14 +2,16 @@
 
 <div class="d-flex">
     <div class="p-2 flex-grow-1 ">
-        <app-transaction-list (payTransactionEvent)="payTransaction($event)" [transactions] = "transactions" [balance]="balance"/>
+        <app-transaction-list (payTransactionEvent)="payTransaction($event)" [transactions] = "transactions" [currentUser]="currentUser"/>
     </div>
     <div class="p-2 flex-shrink-1 ">
         <div class="d-flex flex-column bd-highlight mb-3">
             <div class="p-2 bd-highlight">
                 <app-create-transaction (createTransactionEvent)="createTransaction($event)" [currentUser]="currentUser"/>
             </div>
-            <div class="p-2 bd-highlight"><app-make-deposit/></div>
+            <div class="p-2 bd-highlight">
+                <app-make-deposit (makeDepositEvent)="makeDeposit($event)"/>
+            </div>
         </div>  
     </div>
 </div>

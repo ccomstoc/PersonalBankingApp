@@ -5,6 +5,7 @@ import { LoginDTO } from '../models/LoginDTO.type';
 import { BehaviorSubject, catchError, Observable } from 'rxjs';
 import { User } from '../models/User.type';
 import { Router } from '@angular/router';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,7 @@ export class AuthService {
   //Dependencies
   router = inject(Router);
   http = inject(HttpClient);
+  userService = inject(UserService);
 
   getCurrentUser(): User{
 
@@ -28,6 +30,19 @@ export class AuthService {
     else
       throw Error("Tried to access null user from AuthService");
 
+
+  }
+  setCurrentUser(user:User){
+    localStorage.setItem("user",JSON.stringify(user));
+  }
+  refreshCurrentUser( updateUserDependents: () => void) {
+    this.userService.getUserById(this.getCurrentUser().userId).pipe(catchError((err) => {
+      console.log(err);
+      throw err
+    })).subscribe((user) => {
+      this.setCurrentUser(user);
+      updateUserDependents();
+    })
 
   }
 

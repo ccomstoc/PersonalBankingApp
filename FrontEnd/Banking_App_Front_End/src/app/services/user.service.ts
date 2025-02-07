@@ -17,5 +17,10 @@ export class UserService {
    
   }
 
+  makeDeposit(updatedUser:any){
+    let url:string = "http://localhost:8080/user/deposit";
+    return this.http.patch<User>(url,updatedUser);
+  }
+
   
 }
