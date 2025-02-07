@@ -1,0 +1,47 @@
+TAKE_AWAYS
+
+lifting up state can be very powerful in communicating between components, you should have 
+components with buisness logic, and components that display
+
+make your requests as little relient on current state as possible, do not gather the current 
+balance from the ui when you can get that information in the backend. Otherwise when you make that update,
+if the user wants to make another, they will have to wait for the update to the ui
+
+
+
+
+
+
+
+
+
+MISC
+
+Objective
+
+I have a user stored in local storage, I am also calling methods that change the local user,
+so i need to update the local user after I change them,
+
+The way I can cahnge the local user currently is by sending a request to the backend to update the user,
+then setting the local user to the return value
+
+The problem is, since this is an http request done via httpClient, I need to subscribe and wait for the responce,
+becasue any further functioning of my application requires this user to be up date within the local storage.
+But since subscribe is async, the program continues without gaurenting a user update. Meaning the the client
+could preform an action before the user is updated, breaking things
+
+Thinkning is is an issue with the backend, I need a specialized update method for balance, where I only need to
+submit the change in balance, and the backend takes care of it. These requests should not 
+be relient on data stored in the UI anyway 
+
+This all being said I still should have a refresh user function that resets the local user, and therfore all denpendents
+
+To do: 
+  simplify the update user function, have it just pass a callback for setting current user, possibly try to get rid of current user method, 
+  user contructor to call update function and return it, and have refesh user return or something? 
+
+  make proper deposit function in backend, then integrate it
+
+
+I could just set the localStorage user to returned user, and then set the current local user the that as well
+within make Depoist, but it feels wrong to update it with the current class, I really should make an auth method that does that
