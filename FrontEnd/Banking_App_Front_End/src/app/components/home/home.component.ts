@@ -29,22 +29,21 @@ export class HomeComponent implements OnInit {
   changeDetect = inject(ChangeDetectorRef);
   transactionService = inject(TransactionService);
 
-
-
-  //currentUser: User = this.authService.getCurrentUser();
-
-  
   //Signals
   transactions = signal<Array<Transaction>>([]);
   balance = signal<number>(0);
-  currentUser = signal<User>(this.authService.getCurrentUser());
+  currentUser;
+
+  constructor(){
+    this.currentUser = signal<User>(this.authService.getCurrentUser());
+  }
 
   ngOnInit(): void {  
-
     this.updateTransaction();
-    this.updateBalence();
-
   }
+
+  //________________ACTIONS________________
+  //_______________________________________
 
   payTransaction(id:number){
     this.transactionService.payTransaction(id).pipe(
@@ -53,40 +52,17 @@ export class HomeComponent implements OnInit {
         throw err;
       })//Comment
     ).subscribe((newBalance) => {
+      //modify to return user?
+      
+      let user:User = this.currentUser();
+      user.balance = newBalance;
+      this.updateUser(user);
       this.updateTransaction();
-      this.balance.set(newBalance);
 
     });
 
   }
 
-  updateBalence(){
-
-    this.userService.getUserById(this.currentUser().userId).pipe(catchError((err) => {
-      console.log(err);
-      throw err;
-    })).subscribe((user) => {
-      this.balance.set(user.balance)
-    });
-  }
-
-  updateTransaction(){
-
-    this.transactionService.getAllTransactions(this.currentUser().userId).pipe(
-      catchError((err) => {
-        console.log(err);
-        throw err;
-      })
-    ).subscribe((returnedTransactions) => {
-      this.transactions.set(returnedTransactions);
-    })
-
-  }
-  updateUserDependents(){
-    this.authService.refreshCurrentUser(() => {
-      this.currentUser.set(this.authService.getCurrentUser())
-    })
-  }
 
   createTransaction(transaction:TransactionDTO){
     this.transactionService.createTransaction(transaction)
@@ -104,7 +80,6 @@ export class HomeComponent implements OnInit {
 
   makeDeposit(amount:number){
     
-
     const updatedUser = {
       userId:this.currentUser().userId,
       amount:amount
@@ -114,10 +89,37 @@ export class HomeComponent implements OnInit {
       console.log(err);
       throw err;
     })).subscribe((newUser) => {
-      this.authService.setCurrentUser(newUser);
-      this.currentUser.set(newUser);
+      this.updateUser(newUser);
     })
   }
+
+
+
+  //________________UPDATES________________
+  //_______________________________________
+  updateUser(newUser:User){
+    this.authService.setCurrentUser(newUser);
+    this.currentUser.set(newUser);
+  }
+
+  updateTransaction(){
+
+    this.transactionService.getAllTransactions(this.currentUser().userId).pipe(
+      catchError((err) => {
+        console.log(err);
+        throw err;
+      })
+    ).subscribe((returnedTransactions) => {
+      this.transactions.set(returnedTransactions);
+    })
+
+  }
+  refreshUser(){
+    this.authService.refreshCurrentUser(() => {
+      this.currentUser.set(this.authService.getCurrentUser())
+    })
+  }
+
 
     
 

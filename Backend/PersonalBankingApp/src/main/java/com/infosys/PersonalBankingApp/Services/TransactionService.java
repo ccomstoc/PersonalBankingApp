@@ -1,11 +1,10 @@
 package com.infosys.PersonalBankingApp.Services;
 
+import com.infosys.PersonalBankingApp.DAOs.CategoryDAO;
 import com.infosys.PersonalBankingApp.DAOs.TransactionDAO;
 import com.infosys.PersonalBankingApp.DAOs.UserDAO;
-import com.infosys.PersonalBankingApp.Exceptions.InsufficientBalanceException;
-import com.infosys.PersonalBankingApp.Exceptions.TransactionAlreadyPaid;
-import com.infosys.PersonalBankingApp.Exceptions.TransactionNotFoundException;
-import com.infosys.PersonalBankingApp.Exceptions.UserNotFoundException;
+import com.infosys.PersonalBankingApp.Exceptions.*;
+import com.infosys.PersonalBankingApp.Models.Category;
 import com.infosys.PersonalBankingApp.Models.Transaction;
 import com.infosys.PersonalBankingApp.Models.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -21,11 +21,13 @@ public class TransactionService {
 
     private TransactionDAO tDAO;
     private UserDAO uDAO;
+    private CategoryDAO cDAO;
 
     @Autowired
-    public TransactionService(TransactionDAO tDAO, UserDAO uDAO) {
+    public TransactionService(TransactionDAO tDAO, UserDAO uDAO,CategoryDAO cDAO) {
         this.tDAO = tDAO;
         this.uDAO = uDAO;
+        this.cDAO = cDAO;
 
     }
 
@@ -71,5 +73,31 @@ public class TransactionService {
         }
 
         return tDAO.save(transaction);
+    }
+
+    public Transaction patchTransaction(Map<String,String> patchTransaction) throws Exception{
+        if(!(patchTransaction.containsKey("transactionId"))){
+            throw new TransactionNotFoundException("Transaction id was not provided");
+        }
+        int transactionId = Integer.parseInt(patchTransaction.get("transactionId"));
+        Transaction transaction = tDAO.findById(transactionId).orElseThrow(
+                () ->  new TransactionNotFoundException("Transaction id not found")
+        );
+        //TODO: Add rest of transaction key detection
+        if(patchTransaction.containsKey("categoryId")){
+            int categoryId = Integer.parseInt(patchTransaction.get("categoryId"));
+            Category cat =  cDAO.findById(categoryId).orElseThrow(
+                    () -> new CategoryNotFoundException("Category not found when patching transaction")
+            );
+            transaction.setCategory(cat);
+        }
+
+        return tDAO.save(transaction);
+
+
+    }
+    public List<Transaction> getUncategorizedTransactions(int userId){
+        return tDAO.findByUserUserIdAndCategory(userId,null);
+
     }
 }

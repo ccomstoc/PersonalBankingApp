@@ -19,6 +19,12 @@ export const routes: Routes = [{
         path: '', 
         redirectTo: '/home', 
         pathMatch: 'full' 
+    },{
+        path:'catagorize',
+        canActivate:[authGuard],
+        loadComponent: () => {
+            return import('./components/catagorize/catagorize.component').then((m) => m.CatagorizeComponent);
+        }
     }
     
 ];

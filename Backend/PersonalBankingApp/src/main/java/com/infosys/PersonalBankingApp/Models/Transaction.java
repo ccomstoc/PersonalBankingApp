@@ -29,6 +29,9 @@ public class Transaction {
     @ManyToOne
     private User user;
 
+    @ManyToOne
+    private Category category;
+
     @Transient
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)//Include when deserializing, not serializing
     private int userId;
@@ -102,5 +105,13 @@ public class Transaction {
 
     public void setUserId(int userId) {
         this.userId = userId;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

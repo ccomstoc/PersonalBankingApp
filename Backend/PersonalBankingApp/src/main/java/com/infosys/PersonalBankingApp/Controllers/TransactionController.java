@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("transaction")
@@ -35,5 +36,15 @@ public class TransactionController {
         log.info("ControllerReached");
         return ResponseEntity.status(200).body(tService.payTransaction(transactionId));
     }
+    @PatchMapping
+    public ResponseEntity<Transaction> patchTransaction(@RequestBody Map<String,String> patchTransaction) throws Exception{
+        return ResponseEntity.status(200).body(tService.patchTransaction(patchTransaction));
+
+    }
+    @GetMapping("uncategorized/{userId}")
+    public ResponseEntity<List<Transaction>> getUncategorizedTransactions(@PathVariable int userId){
+        return ResponseEntity.status(200).body(tService.getUncategorizedTransactions(userId));
+    }
+
 
 }
