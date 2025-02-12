@@ -1,8 +1,8 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable, OnDestroy, signal } from '@angular/core';
 
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { LoginDTO } from '../models/LoginDTO.type';
-import { BehaviorSubject, catchError, Observable } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, Subject, takeUntil } from 'rxjs';
 import { User } from '../models/User.type';
 import { Router } from '@angular/router';
 import { UserService } from './user.service';
@@ -10,7 +10,7 @@ import { UserService } from './user.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AuthService implements OnDestroy{
 
   
 
@@ -21,6 +21,13 @@ export class AuthService {
   router = inject(Router);
   http = inject(HttpClient);
   userService = inject(UserService);
+
+  private destroy$ = new Subject<void>();
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   getCurrentUser(): User{
 
@@ -36,7 +43,9 @@ export class AuthService {
     localStorage.setItem("user",JSON.stringify(user));
   }
   refreshCurrentUser( updateUserDependents: () => void) {
-    this.userService.getUserById(this.getCurrentUser().userId).pipe(catchError((err) => {
+    this.userService.getUserById(this.getCurrentUser().userId).pipe(
+      takeUntil(this.destroy$),
+      catchError((err) => {
       console.log(err);
       throw err
     })).subscribe((user) => {

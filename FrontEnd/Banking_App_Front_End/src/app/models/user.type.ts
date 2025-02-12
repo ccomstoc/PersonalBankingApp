@@ -3,5 +3,6 @@ export type User ={
     name:string;
     userName:number;
     balance:number;
+    userCategories:Array<any>
 
 }

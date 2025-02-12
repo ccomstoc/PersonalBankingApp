@@ -1,6 +1,6 @@
-import { ChangeDetectorRef, Component, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { TransactionService } from '../../services/transaction.service';
-import { catchError, Subscription } from 'rxjs';
+import { catchError, Subject, Subscription, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../services/user.service';
@@ -21,13 +21,14 @@ import { UpdateUserDTO } from '../../models/UpdateUserDTO.type';
   styleUrl: './home.component.css'
 })
 
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
 
   //Dependencies
   userService = inject(UserService);
   authService = inject(AuthService);
   changeDetect = inject(ChangeDetectorRef);
   transactionService = inject(TransactionService);
+  private destroy$ = new Subject<void>();
 
   //Signals
   transactions = signal<Array<Transaction>>([]);
@@ -40,6 +41,12 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {  
     this.updateTransaction();
+    console.log("Home init")
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   //________________ACTIONS________________
@@ -47,6 +54,7 @@ export class HomeComponent implements OnInit {
 
   payTransaction(id:number){
     this.transactionService.payTransaction(id).pipe(
+      takeUntil(this.destroy$),
       catchError((err) => {
         console.log(err);
         throw err;
@@ -66,7 +74,9 @@ export class HomeComponent implements OnInit {
 
   createTransaction(transaction:TransactionDTO){
     this.transactionService.createTransaction(transaction)
-          .pipe(catchError((err) => {
+          .pipe(
+            takeUntil(this.destroy$),
+            catchError((err) => {
             console.log(err);
             throw err;
           })).subscribe((newTransaction) => {
@@ -85,7 +95,9 @@ export class HomeComponent implements OnInit {
       amount:amount
     }
     console.log("New User in home comp" + updatedUser)
-    this.userService.makeDeposit(updatedUser).pipe(catchError((err) => {
+    this.userService.makeDeposit(updatedUser).pipe(
+      takeUntil(this.destroy$),
+      catchError((err) => {
       console.log(err);
       throw err;
     })).subscribe((newUser) => {
@@ -103,15 +115,18 @@ export class HomeComponent implements OnInit {
   }
 
   updateTransaction(){
-
+    console.log("updatetransStart");
     this.transactionService.getAllTransactions(this.currentUser().userId).pipe(
+      takeUntil(this.destroy$),
       catchError((err) => {
         console.log(err);
         throw err;
       })
     ).subscribe((returnedTransactions) => {
+      console.log("updatetransSubsribe")
       this.transactions.set(returnedTransactions);
     })
+    console.log("updatetransReturn")
 
   }
   refreshUser(){
@@ -119,6 +134,7 @@ export class HomeComponent implements OnInit {
       this.currentUser.set(this.authService.getCurrentUser())
     })
   }
+
 
 
     

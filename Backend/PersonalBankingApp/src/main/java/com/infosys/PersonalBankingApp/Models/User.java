@@ -3,6 +3,7 @@ package com.infosys.PersonalBankingApp.Models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -25,15 +26,19 @@ public class User {
     @Column(nullable = false)
     private double balance;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)//mapped by prevents to creation of a join table and specifies what field in other entity to map to
+    List<Category> userCategories;
+
     public User() {
     }
 
-    public User(double balance, String password, String userName, String name, int userId) {
-        this.balance = balance;
-        this.password = password;
-        this.userName = userName;
-        this.name = name;
+    public User(int userId, String name, String userName, String password, double balance, List<Category> userCategories) {
         this.userId = userId;
+        this.name = name;
+        this.userName = userName;
+        this.password = password;
+        this.balance = balance;
+        this.userCategories = userCategories;
     }
 
     public int getUserId() {
@@ -76,27 +81,13 @@ public class User {
         this.balance = balance;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return userId == user.userId && Double.compare(balance, user.balance) == 0 && Objects.equals(name, user.name) && Objects.equals(userName, user.userName) && Objects.equals(password, user.password);
+    public List<Category> getUserCategories() {
+        return userCategories;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(userId, name, userName, password, balance);
+    public void setUserCategories(List<Category> userCategories) {
+        this.userCategories = userCategories;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "userId=" + userId +
-                ", name='" + name + '\'' +
-                ", userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
-                ", balance=" + balance +
-                '}';
-    }
+
 }

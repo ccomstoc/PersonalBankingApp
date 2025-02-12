@@ -1,5 +1,6 @@
 package com.infosys.PersonalBankingApp.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,6 +14,7 @@ public class Category {
     private String name;
 
     @ManyToOne
+    @JsonIgnore
     private User user;
 
 
