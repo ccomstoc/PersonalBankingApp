@@ -42,17 +42,24 @@ export class LoginComponent implements OnDestroy{
       throw err;
     })).subscribe((user) => {
       if(user.status != 401 ){//If the responce is a success, set global user
-        console.log('Before updating localStorage:', NgZone.isInAngularZone());
-        
+
+
         localStorage.setItem("user",JSON.stringify(user.body));
 
-        //localStorage.setItem("user","test");
+        // //localStorage.setItem("user","test");
+        // this.ngZone.run(() => {
+        //   console.log('Inside NgZone:', NgZone.isInAngularZone());
+          
+        // });
         this.ngZone.run(() => {
-          console.log('Inside NgZone:', NgZone.isInAngularZone());
-          this.router.navigate(['/catagorize']);
+          console.log("Navigating...");
+          this.cdr.detectChanges();  // Force Angular to update UI
+          this.router.navigateByUrl('/catagorize').then(() => {
+            console.log("Navigation successful");
+            this.cdr.detectChanges();  // Force UI update again after navigation
+            window.location.reload();
+          });
         });
-
-        //this.router.navigate(['/catagorize']);
       }
     })
 
