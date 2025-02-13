@@ -2,6 +2,8 @@ package com.infosys.PersonalBankingApp.Models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 
@@ -30,6 +32,8 @@ public class Transaction {
     private User user;
 
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.SET_NULL)
+    // in schema set constraint: ON DELETE SET NULL
     private Category category;
 
     @Transient

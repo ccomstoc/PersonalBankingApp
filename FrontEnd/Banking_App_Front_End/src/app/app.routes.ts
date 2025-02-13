@@ -7,13 +7,13 @@ export const routes: Routes = [{
         pathMatch:'full', //required if using empty route
         loadComponent: () => {
             console.log("ran logig")
-            return import('./components/login/login.component').then((m) => m.LoginComponent);
+            return import('./components/buisness/login/login.component').then((m) => m.LoginComponent);
     }},
     {
         path:'home',
         canActivate:[authGuard],
         loadComponent: () => {
-                return import('./components/home/home.component').then((m) => m.HomeComponent);
+                return import('./components/buisness/home/home.component').then((m) => m.HomeComponent);
             }
     },
     {
@@ -25,7 +25,7 @@ export const routes: Routes = [{
         path:'catagorize',
         canActivate:[authGuard],
         loadComponent: () => {
-            return import('./components/catagorize/catagorize.component').then((m) => m.CatagorizeComponent);
+            return import('./components/buisness/catagorize/catagorize.component').then((m) => m.CatagorizeComponent);
         }
     },
     {

@@ -1,12 +1,10 @@
 import { Component, EventEmitter, inject, Input, Output, Signal } from '@angular/core';
-import { TransactionService } from '../../services/transaction.service';
-import { FormsModule } from '@angular/forms';
 
-import {TransactionDTO} from '../../models/TransactionDTO.type'
-import { catchError } from 'rxjs';
-import { AuthService } from '../../services/auth.service';
-import { Router } from '@angular/router';
-import { User } from '../../models/User.type';
+import { FormsModule } from '@angular/forms';
+import { TransactionDTO } from '../../../models/TransactionDTO.type';
+import { User } from '../../../models/User.type';
+
+
 
 @Component({
   selector: 'app-create-transaction',

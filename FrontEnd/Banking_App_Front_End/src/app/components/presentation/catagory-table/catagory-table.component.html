@@ -5,6 +5,8 @@
             <th scope="col">Name</th>
             <th scope="col">Total Cost</th>
             <th scope="col">Num Transactions</th>
+            <th scope="col">Delete</th>
+
             
 
 
@@ -17,6 +19,10 @@
               <th scope = "row">{{row.name}}</th>
               <td >BLANK</td>
               <td >BLANK</td>
+              <td >
+                <button (click)="deleteCategory(row.name,row.categoryId)">Delete</button>
+              </td>
+
 
               
             </tr>

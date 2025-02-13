@@ -1,18 +1,18 @@
 import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
-import { TransactionService } from '../../services/transaction.service';
+import { TransactionService } from '../../../services/transaction.service';
 import { catchError, Subject, Subscription, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { UserService } from '../../services/user.service';
-import { NavBarComponent } from "../nav-bar/nav-bar.component";
-import { Transaction } from '../../models/Transaction.type';
-import { AuthService } from '../../services/auth.service';
-import { User } from '../../models/User.type';
-import { TransactionListComponent } from "../transaction-list/transaction-list.component";
-import { CreateTransactionComponent } from "../create-transaction/create-transaction.component";
-import { MakeDepositComponent } from "../make-deposit/make-deposit.component";
-import { TransactionDTO } from '../../models/TransactionDTO.type';
-import { UpdateUserDTO } from '../../models/UpdateUserDTO.type';
+import { UserService } from '../../../services/user.service';
+import { NavBarComponent } from "../../nav-bar/nav-bar.component";
+import { Transaction } from '../../../models/Transaction.type';
+import { AuthService } from '../../../services/auth.service';
+import { User } from '../../../models/User.type';
+import { MakeDepositComponent } from "../../presentation/make-deposit/make-deposit.component";
+import { TransactionDTO } from '../../../models/TransactionDTO.type';
+import { CreateTransactionComponent } from '../../presentation/create-transaction/create-transaction.component';
+import { TransactionListComponent } from '../../presentation/transaction-list/transaction-list.component';
+
 
 @Component({
   selector: 'app-home',

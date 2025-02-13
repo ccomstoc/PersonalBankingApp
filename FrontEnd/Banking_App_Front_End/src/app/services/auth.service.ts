@@ -3,9 +3,10 @@ import { inject, Injectable, OnDestroy, signal } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { LoginDTO } from '../models/LoginDTO.type';
 import { BehaviorSubject, catchError, Observable, Subject, takeUntil } from 'rxjs';
-import { User } from '../models/User.type';
+
 import { Router } from '@angular/router';
 import { UserService } from './user.service';
+import { User } from '../models/User.type';
 
 @Injectable({
   providedIn: 'root'

@@ -1,10 +1,11 @@
 import { ChangeDetectorRef, Component, inject, NgZone, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AuthService } from '../../services/auth.service';
-import { LoginDTO } from '../../models/LoginDTO.type';
+
 import { catchError, Subject, takeUntil } from 'rxjs';
-import { UserService } from '../../services/user.service';
+
 import { Router } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
+import { LoginDTO } from '../../../models/LoginDTO.type';
 
 @Component({
   selector: 'app-login',

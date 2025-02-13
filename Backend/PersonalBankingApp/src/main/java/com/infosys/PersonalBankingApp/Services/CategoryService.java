@@ -2,6 +2,7 @@ package com.infosys.PersonalBankingApp.Services;
 
 import com.infosys.PersonalBankingApp.DAOs.CategoryDAO;
 import com.infosys.PersonalBankingApp.DAOs.UserDAO;
+import com.infosys.PersonalBankingApp.Exceptions.CategoryNotFoundException;
 import com.infosys.PersonalBankingApp.Exceptions.UserNotFoundException;
 import com.infosys.PersonalBankingApp.Models.Category;
 import com.infosys.PersonalBankingApp.Models.DTOs.CategoryDTO;
@@ -32,6 +33,15 @@ public class CategoryService {
 
         return cDAO.save(cat);
 
+    }
+    public Boolean deleteCategory(int catId)throws CategoryNotFoundException{
+        if(cDAO.findById(catId).isPresent()) {
+            cDAO.deleteById(catId);
+            return true;
+        }
+        else {
+            throw new CategoryNotFoundException("Category could not be found when deleting");
+        }
     }
 }
 

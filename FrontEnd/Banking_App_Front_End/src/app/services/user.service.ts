@@ -3,6 +3,10 @@ import { inject, Injectable } from '@angular/core';
 import { catchError } from 'rxjs';
 import { User } from '../models/User.type';
 
+
+
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -20,6 +24,7 @@ export class UserService {
   makeDeposit(updatedUser:any){
     let url:string = "http://localhost:8080/user/deposit";
     return this.http.patch<User>(url,updatedUser);
+
   }
 
   
