@@ -15,10 +15,10 @@
         <tbody>
             
           <tr >
-            <tr *ngFor="let row of currentUser().userCategories ">
+            <tr *ngFor="let row of categoryTable() ">
               <th scope = "row">{{row.name}}</th>
-              <td >BLANK</td>
-              <td >BLANK</td>
+              <td >{{row.sumAmount}}</td>
+              <td >{{row.countTransaction}}</td>
               <td >
                 <button (click)="deleteCategory(row.name,row.categoryId)">Delete</button>
               </td>

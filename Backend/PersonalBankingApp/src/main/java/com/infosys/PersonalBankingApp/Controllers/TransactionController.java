@@ -1,7 +1,9 @@
 package com.infosys.PersonalBankingApp.Controllers;
 
+import com.infosys.PersonalBankingApp.Models.DTOs.CategoryStatisticsDTO;
 import com.infosys.PersonalBankingApp.Models.Transaction;
 import com.infosys.PersonalBankingApp.Services.TransactionService;
+import jakarta.websocket.server.PathParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -44,6 +46,10 @@ public class TransactionController {
     @GetMapping("uncategorized/{userId}")
     public ResponseEntity<List<Transaction>> getUncategorizedTransactions(@PathVariable int userId){
         return ResponseEntity.status(200).body(tService.getUncategorizedTransactions(userId));
+    }
+    @GetMapping("categoryStatistics/{catId}")
+    ResponseEntity<CategoryStatisticsDTO> getStats(@PathVariable int catId){
+        return ResponseEntity.status(200).body(tService.getCategoryStatistics(catId));
     }
 
 

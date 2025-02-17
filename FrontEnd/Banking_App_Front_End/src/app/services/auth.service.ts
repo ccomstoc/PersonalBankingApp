@@ -52,6 +52,7 @@ export class AuthService implements OnDestroy{
     })).subscribe((user) => {
       this.setCurrentUser(user);
       updateUserDependents();
+      console.log("Refreshed user: " + JSON.stringify(user, null, 2))
     })
 
   }

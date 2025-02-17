@@ -1,3 +1,5 @@
+import { Category } from "./Category.type";
+
 export type Transaction = {
     transactionId:number;
     date:string;
@@ -6,5 +8,6 @@ export type Transaction = {
     paid:boolean;
     paidOn?:(string | null);
     user:any;
+    category?: Category;
 
 }

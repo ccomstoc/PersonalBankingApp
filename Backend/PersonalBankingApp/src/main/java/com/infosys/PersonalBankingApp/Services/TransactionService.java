@@ -5,6 +5,7 @@ import com.infosys.PersonalBankingApp.DAOs.TransactionDAO;
 import com.infosys.PersonalBankingApp.DAOs.UserDAO;
 import com.infosys.PersonalBankingApp.Exceptions.*;
 import com.infosys.PersonalBankingApp.Models.Category;
+import com.infosys.PersonalBankingApp.Models.DTOs.CategoryStatisticsDTO;
 import com.infosys.PersonalBankingApp.Models.Transaction;
 import com.infosys.PersonalBankingApp.Models.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,7 +91,9 @@ public class TransactionService {
                     () -> new CategoryNotFoundException("Category not found when patching transaction")
             );
             transaction.setCategory(cat);
+            System.out.println("Transaction " + transaction.getTransactionId() + " set to cat: " + cat.getCategoryId());
         }
+
 
         return tDAO.save(transaction);
 
@@ -99,5 +102,20 @@ public class TransactionService {
     public List<Transaction> getUncategorizedTransactions(int userId){
         return tDAO.findByUserUserIdAndCategory(userId,null);
 
+    }
+
+    public CategoryStatisticsDTO getCategoryStatistics(int categoryId){
+
+        int num = tDAO.getNumTransactionPerCategory(categoryId);
+
+        Optional<Double> amountOptional = tDAO.getAmountPerCategory(categoryId);
+        double amount;
+        if(amountOptional.isPresent())
+            amount = amountOptional.get();
+        else
+            amount = 0;
+
+        //if()
+        return new CategoryStatisticsDTO(num,amount) ;
     }
 }
