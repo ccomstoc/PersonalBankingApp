@@ -13,6 +13,7 @@ import { Transaction } from '../../../models/Transaction.type';
 import { SetCategoryDTO } from '../../../models/DTO/SetCategoryDTO.type';
 import { transition } from '@angular/animations';
 import { CategoryWithStats } from '../../../models/CategoryWithStats.type';
+import { Category } from '../../../models/Category.type';
 
 @Component({
   selector: 'app-catagorize',
@@ -42,6 +43,7 @@ export class CatagorizeComponent implements OnDestroy, OnInit,OnChanges{
 
       effect(() =>{
         this.createCategoryTable(this.currentUser());
+        console.log(JSON.stringify(this.currentUser()));
       })
     }
 
@@ -124,15 +126,14 @@ export class CatagorizeComponent implements OnDestroy, OnInit,OnChanges{
           throw err; 
         })
       ).subscribe((updatedTransaction) => {
-        //ensure local list is updated, without full update, which would remove element from list, to allow for corrections
-        //Can do this with index because it is still current, assuming user didnt press next before 
-        //response
-       let updatedList = this.uncatTransactionList()//set index of incoming index, pass by reffernece to the value within child, alongside event$
-        //tricky because its a signal
-        if(setCategoryDTO.uncatListIndex != undefined){
+        this.refreshCategoryTable(updatedTransaction);//Way better preformance conpared to full user refresh
+
+        //Locally update the sort card list, because a full refresh would be inefficent, and previously assigned categories would be absent
+        let updatedList = this.uncatTransactionList()
+        if(setCategoryDTO.uncatListIndex != undefined){//Type check
+          
           updatedList[setCategoryDTO.uncatListIndex] = updatedTransaction;
           this.uncatTransactionList.set(updatedList);
-          this.refreshUser();
         }
         else{
           throw new Error("uncatTransactions index not provided when required ");
@@ -173,6 +174,19 @@ export class CatagorizeComponent implements OnDestroy, OnInit,OnChanges{
         
 
       }
+    }
+
+    refreshCategoryTable(transaction:Transaction){
+      this.categoryTable().forEach((entry) => console.log(JSON.stringify(entry.categoryId)));
+      console.log(JSON.stringify(transaction.category?.categoryId));
+      let matchingCategoryIndex = this.categoryTable().findIndex((catWithStats) => { return transaction.category?.categoryId == catWithStats.categoryId});
+      console.log(matchingCategoryIndex);
+      if(matchingCategoryIndex == -1)
+          throw new Error("categoryTable refresh unsuccessful, category not found")
+      let table= this.categoryTable()
+      table[matchingCategoryIndex].sumAmount += transaction.amount;
+      table[matchingCategoryIndex].countTransaction++;
+      this.categoryTable.set(table);
     }
 
 
