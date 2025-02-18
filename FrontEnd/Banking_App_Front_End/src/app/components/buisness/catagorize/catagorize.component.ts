@@ -47,7 +47,7 @@ export class CatagorizeComponent implements OnDestroy, OnInit,OnChanges{
 
     ngOnInit(): void {
       this.updateUncatagorizedTransactions();
-      this.createCategoryTable(this.currentUser());
+      //this.createCategoryTable(this.currentUser());
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -147,7 +147,10 @@ export class CatagorizeComponent implements OnDestroy, OnInit,OnChanges{
       console.log("User in createCatTable: " + JSON.stringify(currentUser), null, 2) ;
       let userCategories = currentUser.userCategories
       this.categoryTable.set([])
+      
+      
       for(let i = 0; i < userCategories.length; i++){
+        console.log(userCategories.length + " length")
         console.log("Stat request for id " + userCategories[i].categoryId + " name " + userCategories[i].name)
         this.transactionService.getTransactionCategoryStatistics(userCategories[i].categoryId).pipe(
           takeUntil(this.destroy$),
@@ -156,6 +159,7 @@ export class CatagorizeComponent implements OnDestroy, OnInit,OnChanges{
             throw err;
           })
         ).subscribe((catStatistics => {
+          //If createCattable is called twice in quick succession, the clear table will not take effect properly
           let tableEntry = {
             categoryId:userCategories[i].categoryId,
             name:userCategories[i].name,

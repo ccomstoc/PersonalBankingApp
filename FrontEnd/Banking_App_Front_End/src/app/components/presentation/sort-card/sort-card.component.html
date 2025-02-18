@@ -38,7 +38,7 @@
         <div>
             
             <button *ngIf="transactionListIndex() != 0" (click) = "buttonPrevious()">Previous</button>
-            <button class="float-right" *ngIf="transactionListIndex() != uncatTransactionList().length" (click) = "buttonNext()" >Next</button>
+            <button class="float-right" *ngIf="transactionListIndex() != uncatTransactionList().length-1" (click) = "buttonNext()" >Next</button>
             
         </div>
     </div>

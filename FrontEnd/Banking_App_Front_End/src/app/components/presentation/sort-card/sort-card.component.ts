@@ -42,6 +42,7 @@ export class SortCardComponent implements OnChanges, OnInit{
   }
   buttonNext(){
     this.transactionListIndex.set(this.transactionListIndex()+1);
+    console.log();
   }
   buttonPrevious(){
     this.transactionListIndex.set(this.transactionListIndex()-1);
