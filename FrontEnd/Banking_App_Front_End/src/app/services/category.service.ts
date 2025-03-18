@@ -2,6 +2,7 @@ import { HttpBackend, HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
 import { Category } from '../models/Category.type';
+import { environment } from '../Config/properties';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class CategoryService {
 
     createCategory(catName:String, userId:number){
       console.log("Requesting new category")
-      let url:string = "http://localhost:8080/category";
+      let url:string = environment.baseBackendUrl + "category";
       let category = {
           "name":catName,
           "userId": userId
@@ -21,7 +22,11 @@ export class CategoryService {
       return this.http.post<Category>(url,category);
     }
     deleteCategory(catId:number){
-      let url:string = "http://localhost:8080/category/" + catId;
+      let url:string = environment.baseBackendUrl +"category/" + catId;
       return this.http.delete<boolean>(url);
     }
+
+
+
+    
 }

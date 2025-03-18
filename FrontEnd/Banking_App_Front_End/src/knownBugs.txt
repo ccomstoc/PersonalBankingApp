@@ -1,0 +1,1 @@
+Category Table does not refesh on page refresh
