@@ -2,7 +2,7 @@ package com.infosys.PersonalBankingApp.Models.DTOs;
 
 public class DepositDTO {
     private int userId;
-    private int amount;
+    private double amount;
 
     public DepositDTO(int userId, int amount) {
         this.userId = userId;
@@ -13,7 +13,7 @@ public class DepositDTO {
         return userId;
     }
 
-    public int getAmount() {
+    public double getAmount() {
         return amount;
     }
 }

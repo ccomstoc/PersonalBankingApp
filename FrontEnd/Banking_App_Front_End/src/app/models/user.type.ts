@@ -3,8 +3,9 @@ import { Category } from "./Category.type";
 export type User ={
     userId:number;
     name:string;
-    userName:number;
+    userName:string;
     balance:number;
-    userCategories:Array<Category>
+    userCategories:Array<Category>;
+    valid?: boolean;
 
 }

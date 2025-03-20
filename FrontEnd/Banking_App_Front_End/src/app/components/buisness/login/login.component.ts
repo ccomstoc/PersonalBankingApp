@@ -3,13 +3,13 @@ import { FormsModule } from '@angular/forms';
 
 import { catchError, Subject, takeUntil } from 'rxjs';
 
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { LoginDTO } from '../../../models/LoginDTO.type';
 
 @Component({
   selector: 'app-login',
-  imports: [FormsModule],
+  imports: [FormsModule,RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -43,24 +43,24 @@ export class LoginComponent implements OnDestroy{
       throw err;
     })).subscribe((user) => {
       if(user.status != 401 ){//If the responce is a success, set global user
+        if(user.body)
+          this.authService.setCurrentUser(user.body);
+        //localStorage.setItem("user",JSON.stringify(user.body));
 
 
-        localStorage.setItem("user",JSON.stringify(user.body));
 
-        // //localStorage.setItem("user","test");
         // this.ngZone.run(() => {
-        //   console.log('Inside NgZone:', NgZone.isInAngularZone());
-          
+        //   console.log("Navigating...");
+        //   this.cdr.detectChanges();  // Force Angular to update UI
+        //   this.router.navigateByUrl('/catagorize').then(() => {
+        //     console.log("Navigation successful");
+        //     this.cdr.detectChanges();  // Force UI update again after navigation
+        //     window.location.reload();
+        //   });
+
         // });
-        this.ngZone.run(() => {
-          console.log("Navigating...");
-          this.cdr.detectChanges();  // Force Angular to update UI
-          this.router.navigateByUrl('/catagorize').then(() => {
-            console.log("Navigation successful");
-            this.cdr.detectChanges();  // Force UI update again after navigation
-            window.location.reload();
-          });
-        });
+
+        this.router.navigateByUrl('/home')
       }
     })
 

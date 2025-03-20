@@ -9,5 +9,6 @@ export type Transaction = {
     paidOn?:(string | null);
     user:any;
     category?: Category;
+    type:string;
 
 }

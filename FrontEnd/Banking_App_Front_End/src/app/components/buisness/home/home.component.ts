@@ -12,11 +12,13 @@ import { MakeDepositComponent } from "../../presentation/make-deposit/make-depos
 import { TransactionDTO } from '../../../models/TransactionDTO.type';
 import { CreateTransactionComponent } from '../../presentation/create-transaction/create-transaction.component';
 import { TransactionListComponent } from '../../presentation/transaction-list/transaction-list.component';
+import { TransferComponent } from "../../presentation/transfer/transfer.component";
+import { TransferDTO } from '../../../models/DTO/TransferDTO';
 
 
 @Component({
   selector: 'app-home',
-  imports: [NavBarComponent, CommonModule, FormsModule, TransactionListComponent, CreateTransactionComponent, MakeDepositComponent],
+  imports: [NavBarComponent, CommonModule, FormsModule, TransactionListComponent, CreateTransactionComponent, MakeDepositComponent, TransferComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -102,7 +104,23 @@ export class HomeComponent implements OnInit, OnDestroy {
       throw err;
     })).subscribe((newUser) => {
       this.updateUser(newUser);
+      this.updateTransaction();
     })
+  }
+
+  transfer(transferDTO:TransferDTO){
+    this.userService.transfer(transferDTO).pipe(
+      takeUntil(this.destroy$),
+      catchError((err) => {
+        console.log(err);
+        throw err;
+      })
+    ).subscribe((user) =>{
+      this.updateUser(user);
+      this.updateTransaction();
+    })
+
+
   }
 
 
@@ -124,16 +142,13 @@ export class HomeComponent implements OnInit, OnDestroy {
       })
     ).subscribe((returnedTransactions) => {
       console.log("updatetransSubsribe")
+      console.log(returnedTransactions)
       this.transactions.set(returnedTransactions);
     })
     console.log("updatetransReturn")
 
   }
-  refreshUser(){
-    this.authService.refreshCurrentUser(() => {
-      this.currentUser.set(this.authService.getCurrentUser())
-    })
-  }
+ 
 
 
 

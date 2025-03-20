@@ -1,0 +1,19 @@
+
+<h1>Transfer</h1>
+
+    <div class="form-group col-md-6">
+
+        <label for="username">Recipient Username</label>
+        <div *ngIf="!userFound">
+            <p class="text-danger">User Not Found</p>
+        </div>
+        <div *ngIf="selfTransfer">
+            <p class="text-danger">Can not transfer to self</p>
+        </div>
+        <input type="text" class="form-control" id="username" placeholder="Username" [(ngModel)] = "receivingUsername">
+
+        <label for="inputAmount">Amount</label>
+        <input type="number" class="form-control" id="inputAmount" placeholder="Amount" [(ngModel)] = "amount">
+    </div>
+    <button class="btn btn-outline-success " (click)="sendMoney()">Send</button>
+

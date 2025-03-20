@@ -14,8 +14,9 @@ import java.util.Optional;
 @Repository
 public interface TransactionDAO extends JpaRepository<Transaction,Integer> {
 
-
-    List<Transaction> findByUserUserId(int id);
+    @Query("SELECT t FROM Transaction t " +
+            "WHERE t.user.userId = :id ORDER BY t.transactionId DESC")
+    List<Transaction> findByUserUserIdSorted(@Param("id")int id);
 
     public List<Transaction> findByUserUserIdAndCategory(int userId, Category cat);
 

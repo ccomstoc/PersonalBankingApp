@@ -1,6 +1,7 @@
 package com.infosys.PersonalBankingApp.Models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.infosys.PersonalBankingApp.Models.Enums.TransactionType;
 import jakarta.persistence.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -28,7 +29,12 @@ public class Transaction {
 
     private LocalDate paidOn;
 
+    //if null, database defaults to withdrawal
+    @Enumerated(EnumType.STRING)
+    private TransactionType type;
+
     @ManyToOne
+    @JoinColumn(nullable = false)
     private User user;
 
     @ManyToOne
@@ -117,5 +123,13 @@ public class Transaction {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public TransactionType getType() {
+        return type;
+    }
+
+    public void setType(TransactionType type) {
+        this.type = type;
     }
 }

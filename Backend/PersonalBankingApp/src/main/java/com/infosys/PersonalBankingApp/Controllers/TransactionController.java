@@ -25,17 +25,16 @@ public class TransactionController {
     }
     @GetMapping("/userId/{userId}")
     public ResponseEntity<List<Transaction>> findUsersTransactions(@PathVariable int userId){
-        log.info("ControllerReached");
+
         return ResponseEntity.status(200).body(tService.getUsersTransactions(userId));
     }
     @PostMapping
     public ResponseEntity<Transaction> createTransaction(@RequestBody Transaction transaction) throws Exception{
-        log.info("ControllerReached");
+
         return ResponseEntity.status(201).body(tService.createTransaction(transaction));
     }
     @PutMapping("pay/{transactionId}")
     public ResponseEntity<Double> payTransaction(@PathVariable int transactionId) throws Exception {
-        log.info("ControllerReached");
         return ResponseEntity.status(200).body(tService.payTransaction(transactionId));
     }
     @PatchMapping

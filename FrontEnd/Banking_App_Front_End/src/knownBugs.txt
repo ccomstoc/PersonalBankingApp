@@ -1,1 +1,18 @@
+IN_PROGRESS
+    sort card claims all are sorted at end, even if you skipped some, takes page refresh to show again
+    delete transaction? 
+    sort table responces
+
+
+
+
+
+DONE
+
 Category Table does not refesh on page refresh
+    This was tricky because the information was tied to currentUser, and is refreshed whenever current user info changes
+    ie a category is created. But on load, the table would be built twice because ngOnInit pulls new user,
+    triggering effect, and effect runs again at start
+    Tempory fix is added a valid feild to user, and invaliding the old user, but still using its data until the new user
+    triggers effect 
+

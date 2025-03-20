@@ -36,6 +36,17 @@ export const routes: Routes = [{
             return import('./testing-freeze/testing-freeze.component').then((m) => m.TestingFreezeComponent);
         }
 
+    },{
+        path:'analyze',
+        canActivate:[authGuard],
+        loadComponent: () => {
+            return import('./components/buisness/analyze/analyze.component').then((m) => m.AnalyzeComponent);
+        }
+    },{
+        path:'createAccount',
+        loadComponent: () => {
+            return import('./components/buisness/create-account/create-account.component').then((m) => m.CreateAccountComponent);
+        }
     }
 
     

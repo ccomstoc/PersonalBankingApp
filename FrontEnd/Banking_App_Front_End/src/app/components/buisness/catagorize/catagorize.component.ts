@@ -36,18 +36,30 @@ export class CatagorizeComponent implements OnDestroy, OnInit,OnChanges{
   
     constructor(){
 
-      
-      this.currentUser = signal<User>(this.authService.getCurrentUser());
+      //dont popluate until use effect
+      let tempUser:User = this.authService.getCurrentUser();
+      //invalidate User, letting effect know it should not re-render until user is updated and valid
+      tempUser.valid = false;
+      this.currentUser = signal<User>(tempUser);
       this.uncatTransactionList = signal<Array<Transaction>>([])
       this.categoryTable = signal<Array<CategoryWithStats>>([]);
 
-      effect(() =>{
-        this.createCategoryTable(this.currentUser());
-        console.log(JSON.stringify(this.currentUser()));
+
+      effect(() =>{//update when user signal is changed, user signal is changed after refesh user call back function is run
+        
+        //if user is populated, then run
+        //prevents double rendering when refresh user is called in onInit
+        if(this.currentUser().valid){
+          this.createCategoryTable(this.currentUser());
+          console.log("EFFECT")
+          console.log(JSON.stringify(this.currentUser()) + " !!!User updated!!!");
+        }
       })
     }
 
     ngOnInit(): void {
+      console.log("on intit")
+      this.authService.refreshUser(this.currentUser);
       this.updateUncatagorizedTransactions();
       //this.createCategoryTable(this.currentUser());
     }
@@ -77,7 +89,7 @@ export class CatagorizeComponent implements OnDestroy, OnInit,OnChanges{
       //   tempUser.userCategories.push(cat);
       //  this.updateUser(tempUser);
         //then refresh entire local user
-        this.refreshUser();
+        this.authService.refreshUser(this.currentUser);
       })
     }
 
@@ -93,7 +105,7 @@ export class CatagorizeComponent implements OnDestroy, OnInit,OnChanges{
           console.log("Cat deletion success")
           this.updateUncatagorizedTransactions();//Having this before the user refresh allows items in the current uncat list to remain?
           //but only for one deletion
-          this.refreshUser();
+          this.authService.refreshUser(this.currentUser);
           
       })
 
@@ -111,8 +123,8 @@ export class CatagorizeComponent implements OnDestroy, OnInit,OnChanges{
       ).subscribe((transactionList) =>{
         this.uncatTransactionList.set(transactionList);
         //this is logged before table doubling bug
-        console.log("TransactionList:")
-        console.log(transactionList)
+        //console.log("TransactionList:")
+        //console.log(transactionList)
       })
 
     }
@@ -145,14 +157,16 @@ export class CatagorizeComponent implements OnDestroy, OnInit,OnChanges{
     }
 
     createCategoryTable(currentUser:User){
-      console.log("User in createCatTable: " + JSON.stringify(currentUser), null, 2) ;
+
       let userCategories = currentUser.userCategories
+      //function works by adding to current array, so need to reset
       this.categoryTable.set([])
       
       
       for(let i = 0; i < userCategories.length; i++){
-        console.log(userCategories.length + " length")
-        console.log("Stat request for id " + userCategories[i].categoryId + " name " + userCategories[i].name)
+        console.log(i);
+        //console.log(userCategories.length + " length")
+        //console.log("Stat request for id " + userCategories[i].categoryId + " name " + userCategories[i].name)
         this.transactionService.getTransactionCategoryStatistics(userCategories[i].categoryId).pipe(
           takeUntil(this.destroy$),
           catchError((err) => {
@@ -169,7 +183,8 @@ export class CatagorizeComponent implements OnDestroy, OnInit,OnChanges{
             sumAmount:catStatistics.sumAmount
           }
           this.categoryTable().push(tableEntry);
-          console.log(this.categoryTable() + " cat Table above")
+          
+          console.log(this.categoryTable()[this.categoryTable().length-1].name + " cat Table above")
         }))
         
 
@@ -178,9 +193,9 @@ export class CatagorizeComponent implements OnDestroy, OnInit,OnChanges{
 
     refreshCategoryTable(transaction:Transaction){
       this.categoryTable().forEach((entry) => console.log(JSON.stringify(entry.categoryId)));
-      console.log(JSON.stringify(transaction.category?.categoryId));
+      //console.log(JSON.stringify(transaction.category?.categoryId));
       let matchingCategoryIndex = this.categoryTable().findIndex((catWithStats) => { return transaction.category?.categoryId == catWithStats.categoryId});
-      console.log(matchingCategoryIndex);
+      //console.log(matchingCategoryIndex);
       if(matchingCategoryIndex == -1)
           throw new Error("categoryTable refresh unsuccessful, category not found")
       let table= this.categoryTable()
@@ -194,15 +209,9 @@ export class CatagorizeComponent implements OnDestroy, OnInit,OnChanges{
 
     updateUser(newUser:User){
       this.authService.setCurrentUser(newUser);
-      console.log("Current User changed in cat Component")
+      //console.log("Current User changed in cat Component")
       this.currentUser.set(newUser);
     }
-    refreshUser(){
-      this.authService.refreshCurrentUser(() => {
-        console.log('Fresh user')
-        this.currentUser.set(this.authService.getCurrentUser())
-        console.log("Current User Set");
-      })
-    }
+    
 
 }

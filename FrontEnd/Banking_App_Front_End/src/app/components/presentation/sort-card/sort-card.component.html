@@ -1,71 +1,55 @@
-<div class="card " style="width: 30rem;">
-    <!-- Render -->
-    <div *ngIf="uncatTransactionList() != undefined && transactionListIndex() != uncatTransactionList().length"> 
-        <div class="card " style="width: 30rem;">
-            <div class="card-body">
-                <!-- Transaction Details -->
-                <div >
-                    <h5 class="card-title">{{getCurrentTransaction().description}}</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">Amount: ${{getCurrentTransaction().amount}}</h6>
-                    <h6 class="card-subtitle mb-2 text-muted">Date: {{getCurrentTransaction().date}}</h6>
-                    <h6 class="card-subtitle mb-2 text-muted">Id: {{getCurrentTransaction().transactionId}}</h6>
-                </div>
-                
-                <!-- Categorize Buttons -->
-                <div class="row" *ngFor="let outerArray of categoryButtonsSignal()">
-                    <div class="col-5 d-flex " >
-                        <div *ngFor="let category of outerArray">
-                            <!-- if the current category is == the current transaction category-->
-                            <button 
-                                [ngClass]="{
-                                    
-                                    'btn-outline-primary': getCurrentTransaction().category?.categoryId != category.categoryId,
-                                    'btn-primary': getCurrentTransaction().category?.categoryId == category.categoryId
-                                }"
-    
-                                class="btn p-4 rounded-0 border border-dark" (click)="assignCategory(category.categoryId)">
-                                
-                                {{ category.name }}
-                                
-                            </button>   
-                        </div>
-                    </div>
-                </div>
-    
+<div class="container mt-4">
+    <!-- Render Transaction Card -->
+    <div *ngIf="uncatTransactionList() != undefined && transactionListIndex() != uncatTransactionList().length; else allCategorized">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <!-- Transaction Details -->
+          <div class="mb-3">
+            <h5 class="card-title">{{ getCurrentTransaction().description }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">
+              Amount: ${{ getCurrentTransaction().amount }}
+            </h6>
+            <h6 class="card-subtitle mb-2 text-muted">
+              Date: {{ getCurrentTransaction().date }}
+            </h6>
+            <h6 class="card-subtitle mb-2 text-muted">
+              Id: {{ getCurrentTransaction().transactionId }}
+            </h6>
+          </div>
+          <!-- Categorize Buttons -->
+          <div *ngFor="let outerArray of categoryButtonsSignal()">
+            <div class="d-flex flex-wrap mb-2">
+              <button *ngFor="let category of outerArray"
+                class="btn m-1 p-3 rounded-0 border border-dark"
+                [ngClass]="{
+                  'btn-outline-primary': getCurrentTransaction().category?.categoryId != category.categoryId,
+                  'btn-primary': getCurrentTransaction().category?.categoryId == category.categoryId
+                }"
+                (click)="assignCategory(category.categoryId)">
+                {{ category.name }}
+              </button>
             </div>
+          </div>
         </div>
-        <!-- Previous/next -->
-        <div>
-            
-            <button *ngIf="transactionListIndex() != 0" (click) = "buttonPrevious()">Previous</button>
-            <button class="float-right" *ngIf="transactionListIndex() != uncatTransactionList().length-1" (click) = "buttonNext()" >Next</button>
-            
-        </div>
+      </div>
+      <!-- Navigation Buttons -->
+      <div class="d-flex justify-content-between mt-3">
+        <button *ngIf="transactionListIndex() != 0"
+                class="btn btn-secondary"
+                (click)="buttonPrevious()">
+          Previous
+        </button>
+        <button *ngIf="transactionListIndex() != uncatTransactionList().length - 1"
+                class="btn btn-secondary"
+                (click)="buttonNext()">
+          Next
+        </button>
+      </div>
     </div>
-    <!-- Dont render   -->
-    <div>
-        <div *ngIf="uncatTransactionList().length == 0 || transactionListIndex() == uncatTransactionList().length">
-            All Transactions Categorized!
-
-        </div>
-    </div>
-    
-    
-    <div class="container">
-        
-        <!-- <div class="row">
-            <div class="col-5 d-flex " >
-                <button class="btn btn-outline-primary p-4 rounded-0 border border-dark">Food</button>
-                <button class="btn btn-outline-primary p-4 rounded-0 border border-dark">Gas</button>
-                <button class="btn btn-outline-primary p-4 rounded-0 border border-dark" >Home Goods</button>
-                <button class="btn btn-outline-primary p-4 rounded-0 border border-dark">Transportaiton</button>
-            </div>
-        </div> -->
-        
-    </div>
-        
-
-
-</div>
-
-
+    <!-- All Transactions Categorized Message -->
+    <ng-template #allCategorized>
+      <div class="alert alert-success text-center mt-4">
+        All Transactions Categorized!
+      </div>
+    </ng-template>
+  </div>

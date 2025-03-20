@@ -33,7 +33,7 @@ public class TransactionService {
     }
 
     public List<Transaction> getUsersTransactions(int id){
-        return tDAO.findByUserUserId(id);
+        return tDAO.findByUserUserIdSorted(id);
     }
 
     @Transactional

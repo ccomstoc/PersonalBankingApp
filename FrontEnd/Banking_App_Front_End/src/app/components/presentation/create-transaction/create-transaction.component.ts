@@ -29,6 +29,7 @@ export class CreateTransactionComponent {
             amount:this.amount,
             date:this.date,
             //isPaid:this.isPaid,
+            type:"WITHDRAWAL",
             userId:this.currentUser().userId
 
           };

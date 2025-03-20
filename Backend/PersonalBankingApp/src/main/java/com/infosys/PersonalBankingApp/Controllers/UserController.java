@@ -2,6 +2,7 @@ package com.infosys.PersonalBankingApp.Controllers;
 
 import com.infosys.PersonalBankingApp.Exceptions.UserNotFoundException;
 import com.infosys.PersonalBankingApp.Models.DTOs.DepositDTO;
+import com.infosys.PersonalBankingApp.Models.DTOs.TransferDTO;
 import com.infosys.PersonalBankingApp.Models.User;
 import com.infosys.PersonalBankingApp.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import java.util.Map;
 @CrossOrigin
 public class UserController {
 
-    private UserService uService;
+    private final UserService uService;
 
     @Autowired
     UserController(UserService uService){
@@ -25,6 +26,10 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<User> getUser(@PathVariable int id) throws Exception{
         return ResponseEntity.status(200).body(uService.getUser(id));
+    }
+    @GetMapping("/username/{username}")
+    public ResponseEntity<User> findByUsername(@PathVariable String username){
+        return ResponseEntity.status(200).body(uService.findUserByUsername(username));
     }
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User newUser){
@@ -40,6 +45,13 @@ public class UserController {
     public ResponseEntity<User> makeDeposit(@RequestBody DepositDTO deposit)throws UserNotFoundException{
         return ResponseEntity.status(200).body(uService.makeDeposit(deposit));
     }
+
+    @PatchMapping("/transfer")
+    public ResponseEntity<User> transfer(@RequestBody TransferDTO tDTO) throws Exception{
+        return ResponseEntity.status(200).body(uService.transferMoney(tDTO.getSendingUserId(),tDTO.getReceivingUserId(),tDTO.getAmount()));
+    }
+
+
 
 
 

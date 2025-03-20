@@ -1,20 +1,38 @@
-<app-nav-bar/>
-<div class="d-flex">
-    <div class="p-2 flex-grow-1 ">
-        <app-sort-card [currentUser]="currentUser" [uncatTransactionList]="uncatTransactionList" (assignCategoryEvent)="assignCategory($event)"/>
+<app-nav-bar></app-nav-bar>
+<div class="container mt-4">
+  <div class="row">
+    <!-- Left Column: Sort Card -->
+    <div class="col-md-6 mb-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <app-sort-card 
+            [currentUser]="currentUser" 
+            [uncatTransactionList]="uncatTransactionList" 
+            (assignCategoryEvent)="assignCategory($event)">
+          </app-sort-card>
+        </div>
+      </div>
     </div>
-    <div class="p-2 flex-grow-1">
-        
-        <div class="d-flex flex-column bd-highlight mb-3">
-            <div class="p-2 bd-highlight">
-                <app-catagory-table [categoryTable]="categoryTable" (deleteCategoryEvent)="deleteCategory($event)"/>
-            </div>
-            <div class="p-2 bd-highlight">
-                <app-create-category (createCategoryEvent)="createCategory($event)"/>
-            </div>
-        </div>  
-
+    
+    <!-- Right Column: Category Table and Create Category -->
+    <div class="col-md-6">
+      <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+          <app-catagory-table 
+            [categoryTable]="categoryTable" 
+            (deleteCategoryEvent)="deleteCategory($event)">
+          </app-catagory-table>
+        </div>
+      </div>
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <app-create-category 
+            (createCategoryEvent)="createCategory($event)">
+          </app-create-category>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 
 

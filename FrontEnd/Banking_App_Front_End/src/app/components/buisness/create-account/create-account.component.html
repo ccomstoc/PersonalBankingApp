@@ -1,0 +1,29 @@
+  <div class="create-account-container">
+    <h1 class="create-account-title">Create Account</h1>
+
+    <div *ngIf="!allInformation">
+        <p class="text-danger">Please enter all information</p>
+      </div>
+
+    <div class="input-container">
+      <input type="text" class="form-control" placeholder="Name" name="name" [(ngModel)]="name" />
+    </div>
+
+    <div class="input-container">
+      <input type="text" class="form-control" placeholder="Username" name="username" [(ngModel)]="username" />
+    </div>
+
+    <div *ngIf="!doesPassMatch">
+      <p class="text-danger">Passwords do not match</p>
+    </div>
+
+    <div class="input-container">
+      <input type="password" class="form-control" placeholder="Password" name="password" [(ngModel)]="password" />
+    </div>
+
+    <div class="input-container">
+      <input type="password" class="form-control" placeholder="Confirm Password" name="confirmPassword" [(ngModel)]="confirmPassword" />
+    </div>
+
+    <button type="button" class="btn btn-primary create-account-button" (click)="createAccount()">Create Account</button>
+  </div>

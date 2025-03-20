@@ -3,5 +3,6 @@ export type TransactionDTO = {
     amount:number,
     isPaid?:boolean,
     date:string,
-    userId:number
+    userId:number,
+    type:string
 }

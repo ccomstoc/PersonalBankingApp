@@ -1,6 +1,6 @@
 
 <div>
-    <p>Balance: {{currentUser().balance}}</p>
+    <p>Balance: {{currentUser().balance | currency}}</p>
 
 </div>
 <div class="px-1 ">
@@ -12,6 +12,7 @@
             <th scope="col">Amount</th>
             <th scope="col">Description</th>
             <th scope="col">Status</th>
+            <th scope="col">Type</th>
 
           </tr>
         </thead>
@@ -20,14 +21,36 @@
           <tr *ngFor="let row of transactions()">
             <th scope = "row">{{row.transactionId}}</th>
             <td >{{row.date}}</td>
-            <td >{{row.amount}}</td>
+            <td 
+              [ngClass]="{
+                'text-success': (row.type == 'DEPOSIT')
+              }"
+              >
+              <div *ngIf="! (row.type == 'DEPOSIT') ">
+                -{{row.amount | currency}} 
+              </div>
+              <div *ngIf="(row.type == 'DEPOSIT') ">
+                +{{row.amount | currency}} 
+              </div>
+                
+            </td>
             <td >{{row.description}}</td>
-            <td *ngIf = "row.paid">Paid on: {{row.paidOn}}</td>
+            <td *ngIf = "row.paid">
+                <div *ngIf="! (row.type == 'DEPOSIT') ">
+                Paid on: {{row.paidOn}}
+              </div>
+              <div *ngIf="(row.type == 'DEPOSIT') ">
+                Completed
+              </div>
+            </td>
             <td *ngIf = "!row.paid">
                 <button (click) = "payTransaction(row.transactionId)">Pay</button>
-
             </td>
-          </tr>
+            <td>
+              {{row.type}}
+            </td>
+          </tr> 
+
         </tbody>
       </table>
 </div>
