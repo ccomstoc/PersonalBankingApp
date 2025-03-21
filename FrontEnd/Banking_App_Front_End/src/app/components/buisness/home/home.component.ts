@@ -14,6 +14,7 @@ import { CreateTransactionComponent } from '../../presentation/create-transactio
 import { TransactionListComponent } from '../../presentation/transaction-list/transaction-list.component';
 import { TransferComponent } from "../../presentation/transfer/transfer.component";
 import { TransferDTO } from '../../../models/DTO/TransferDTO';
+import { DepositDTO } from '../../../models/DTO/DepositDTO';
 
 
 @Component({
@@ -73,8 +74,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   }
 
-
   createTransaction(transaction:TransactionDTO){
+
     this.transactionService.createTransaction(transaction)
           .pipe(
             takeUntil(this.destroy$),
@@ -92,7 +93,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   makeDeposit(amount:number){
     
-    const updatedUser = {
+    
+    const updatedUser:DepositDTO = {
       userId:this.currentUser().userId,
       amount:amount
     }

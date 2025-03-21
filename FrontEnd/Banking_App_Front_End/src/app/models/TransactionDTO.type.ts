@@ -4,5 +4,6 @@ export type TransactionDTO = {
     isPaid?:boolean,
     date:string,
     userId:number,
-    type:string
+    type:String
+
 }

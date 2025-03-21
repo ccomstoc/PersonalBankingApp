@@ -3,13 +3,24 @@
   <div class="row">
     <!-- Left Column: Sort Card -->
     <div class="col-md-6 mb-4">
-      <div class="card shadow-sm">
+      <div class="card mb-4 shadow-sm">
         <div class="card-body">
+          <h3>Transactions</h3>
           <app-sort-card 
             [currentUser]="currentUser" 
             [uncatTransactionList]="uncatTransactionList" 
-            (assignCategoryEvent)="assignCategory($event)">
+            (assignCategoryEvent)="assignCategory($event)"
+            (listComplete)="updateUncatagorizedTransactions()"
+            >
           </app-sort-card>
+        </div>
+      </div>
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <app-create-category 
+            [currentUser]="currentUser" 
+            (createCategoryEvent)="createCategory($event)">
+          </app-create-category>
         </div>
       </div>
     </div>
@@ -18,19 +29,23 @@
     <div class="col-md-6">
       <div class="card mb-4 shadow-sm">
         <div class="card-body">
+          <h3>Spending</h3>
           <app-catagory-table 
-            [categoryTable]="categoryTable" 
+            [categoryTable]="spendingCategoryTable" 
             (deleteCategoryEvent)="deleteCategory($event)">
           </app-catagory-table>
         </div>
       </div>
-      <div class="card shadow-sm">
+      <div class="card mb-4 shadow-sm">
         <div class="card-body">
-          <app-create-category 
-            (createCategoryEvent)="createCategory($event)">
-          </app-create-category>
+          <h3>Income</h3>
+          <app-catagory-table 
+            [categoryTable]="incomeCategoryTable" 
+            (deleteCategoryEvent)="deleteCategory($event)">
+          </app-catagory-table>
         </div>
       </div>
+      
     </div>
   </div>
 </div>

@@ -72,7 +72,8 @@ export class AnalyzeComponent implements OnInit, OnDestroy{
               name:userCategories[i].name,
               userId:userCategories[i].userId,
               countTransaction:catStatistics.countTransaction,
-              sumAmount:catStatistics.sumAmount
+              sumAmount:catStatistics.sumAmount,
+              type:userCategories[i].type
             }
             //Add category with stats to array
             this.categoryArray().push(tableEntry);

@@ -1,37 +1,6 @@
 <div class="container mt-4">
     <!-- Render Transaction Card -->
-    <div *ngIf="uncatTransactionList() != undefined && transactionListIndex() != uncatTransactionList().length; else allCategorized">
-      <div class="card shadow-sm">
-        <div class="card-body">
-          <!-- Transaction Details -->
-          <div class="mb-3">
-            <h5 class="card-title">{{ getCurrentTransaction().description }}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">
-              Amount: ${{ getCurrentTransaction().amount }}
-            </h6>
-            <h6 class="card-subtitle mb-2 text-muted">
-              Date: {{ getCurrentTransaction().date }}
-            </h6>
-            <h6 class="card-subtitle mb-2 text-muted">
-              Id: {{ getCurrentTransaction().transactionId }}
-            </h6>
-          </div>
-          <!-- Categorize Buttons -->
-          <div *ngFor="let outerArray of categoryButtonsSignal()">
-            <div class="d-flex flex-wrap mb-2">
-              <button *ngFor="let category of outerArray"
-                class="btn m-1 p-3 rounded-0 border border-dark"
-                [ngClass]="{
-                  'btn-outline-primary': getCurrentTransaction().category?.categoryId != category.categoryId,
-                  'btn-primary': getCurrentTransaction().category?.categoryId == category.categoryId
-                }"
-                (click)="assignCategory(category.categoryId)">
-                {{ category.name }}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div *ngIf="uncatTransactionList() != undefined && transactionListIndex() != uncatTransactionList().length && uncatTransactionList() != []; else allCategorized">
       <!-- Navigation Buttons -->
       <div class="d-flex justify-content-between mt-3">
         <button *ngIf="transactionListIndex() != 0"
@@ -45,6 +14,44 @@
           Next
         </button>
       </div>
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <!-- Transaction Details -->
+          <div class="mb-3">
+            <h5 class="card-title">{{ getCurrentTransaction().description }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">
+              Amount: {{ getCurrentTransaction().amount | currency}}
+            </h6>
+            <h6 class="card-subtitle mb-2 text-muted">
+              Type: {{ getCurrentTransaction().type }}
+            </h6>
+            <h6 class="card-subtitle mb-2 text-muted">
+              Date: {{ getCurrentTransaction().date | date }}
+            </h6>
+            <h6 class="card-subtitle mb-2 text-muted">
+              Id: {{ getCurrentTransaction().transactionId }}
+            </h6>
+          </div>
+          <!-- Categorize Buttons -->
+          <div *ngFor="let outerArray of categoryButtonsSignal()">
+            <div class="d-flex flex-wrap mb-2">
+                <ng-container *ngFor="let category of outerArray">
+                  <button *ngIf="category.type ===  getCurrentTransaction().type"
+                    class="btn m-1 p-3 rounded-0 border border-dark"
+                    [ngClass]="{
+                      'btn-outline-primary': getCurrentTransaction().category?.categoryId != category.categoryId,
+                      'btn-primary': getCurrentTransaction().category?.categoryId == category.categoryId
+                    }"
+                    (click)="assignCategory(category.categoryId)">
+                    {{ category.name }}
+                  </button>
+                </ng-container>
+                  
+            </div>
+          </div>
+        </div>
+      </div>
+      
     </div>
     <!-- All Transactions Categorized Message -->
     <ng-template #allCategorized>

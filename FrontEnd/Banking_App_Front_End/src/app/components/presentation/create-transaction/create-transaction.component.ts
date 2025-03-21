@@ -28,9 +28,9 @@ export class CreateTransactionComponent {
             description:this.description,
             amount:this.amount,
             date:this.date,
-            //isPaid:this.isPaid,
-            type:"WITHDRAWAL",
-            userId:this.currentUser().userId
+            userId:this.currentUser().userId,
+            type:"SPENDING"
+            
 
           };
           this.createTransactionEvent.emit(transaction);

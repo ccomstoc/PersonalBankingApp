@@ -3,6 +3,8 @@ import { FormsModule } from '@angular/forms';
 import { User } from '../../../models/User.type';
 import { CategoryService } from '../../../services/category.service';
 import { catchError, Subject } from 'rxjs';
+import { CreateCategoryDTO } from '../../../models/DTO/CreateCategoryDTO';
+import { SetCategoryDTO } from '../../../models/DTO/SetCategoryDTO.type';
 
 @Component({
   selector: 'app-create-category',
@@ -13,17 +15,25 @@ import { catchError, Subject } from 'rxjs';
 export class CreateCategoryComponent {
 
   @Input() currentUser!:Signal<User>;
-  @Output() createCategoryEvent = new EventEmitter<string>;
+  @Output() createCategoryEvent = new EventEmitter<CreateCategoryDTO>;
 
   private destroy$ = new Subject<void>();
 
   categoryService = inject(CategoryService);
+  categoryType!:string;
 
   categoryName!:string;
 
   //Lift to parent
   createCategory(){
-    this.createCategoryEvent.emit(this.categoryName);
+
+    let catDTO:CreateCategoryDTO = {
+      name:this.categoryName,
+      userId:this.currentUser().userId,
+      type:this.categoryType
+
+    }
+    this.createCategoryEvent.emit(catDTO);
     
   }
 

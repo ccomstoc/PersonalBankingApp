@@ -30,6 +30,7 @@ public class CategoryService {
         Category cat = new Category();
         cat.setUser(user);
         cat.setName(catDTO.getName());
+        cat.setType(catDTO.getType());
 
         return cDAO.save(cat);
 

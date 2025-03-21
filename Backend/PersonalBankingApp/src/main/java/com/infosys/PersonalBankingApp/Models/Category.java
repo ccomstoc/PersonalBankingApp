@@ -1,6 +1,7 @@
 package com.infosys.PersonalBankingApp.Models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.infosys.PersonalBankingApp.Models.Enums.TransactionType;
 import jakarta.persistence.*;
 
 @Entity
@@ -17,15 +18,26 @@ public class Category {
     @JsonIgnore
     private User user;
 
+    @Enumerated(EnumType.STRING)
+    private TransactionType type;
 
 
     public Category() {
     }
 
-    public Category(int categoryId, String name, User user) {
+    public Category(int categoryId, String name, User user, TransactionType type) {
         this.categoryId = categoryId;
         this.name = name;
         this.user = user;
+        this.type = type;
+    }
+
+    public TransactionType getType() {
+        return type;
+    }
+
+    public void setType(TransactionType type) {
+        this.type = type;
     }
 
     public int getCategoryId() {

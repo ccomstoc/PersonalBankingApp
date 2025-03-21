@@ -1,6 +1,5 @@
 package com.infosys.PersonalBankingApp.Services;
 
-import com.infosys.PersonalBankingApp.DAOs.TransactionDAO;
 import com.infosys.PersonalBankingApp.DAOs.UserDAO;
 import com.infosys.PersonalBankingApp.Exceptions.InsufficientBalanceException;
 import com.infosys.PersonalBankingApp.Exceptions.UserNotFoundException;
@@ -59,7 +58,7 @@ public class UserService {
         transaction.setDescription("Deposit");
         transaction.setPaid(true);
         transaction.setPaidOn(LocalDate.now());
-        transaction.setType(TransactionType.DEPOSIT);
+        transaction.setType(TransactionType.INCOME);
 
 
         tService.createTransaction(transaction);
@@ -102,7 +101,7 @@ public class UserService {
 
         Transaction sendingTransaction = new Transaction();
             sendingTransaction.setUser(sendingUser);
-            sendingTransaction.setType(TransactionType.TRANSFER);
+            sendingTransaction.setType(TransactionType.SPENDING);
             sendingTransaction.setDescription("Transfer to " + receivingUser.getUserName());
             sendingTransaction.setDate(LocalDate.now());
             sendingTransaction.setPaid(true);
@@ -111,7 +110,7 @@ public class UserService {
 
         Transaction receivingTransaction = new Transaction();
             receivingTransaction.setUser(receivingUser);
-            receivingTransaction.setType(TransactionType.DEPOSIT);
+            receivingTransaction.setType(TransactionType.INCOME);
             receivingTransaction.setDescription("Transfer from " + sendingUser.getUserName());
             receivingTransaction.setDate(LocalDate.now());
             receivingTransaction.setPaid(true);

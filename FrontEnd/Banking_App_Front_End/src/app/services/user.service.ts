@@ -4,6 +4,7 @@ import { catchError } from 'rxjs';
 import { User } from '../models/User.type';
 import { environment } from '../Config/properties';
 import { TransferDTO } from '../models/DTO/TransferDTO';
+import { DepositDTO } from '../models/DTO/DepositDTO';
 
 
 
@@ -22,7 +23,7 @@ export class UserService {
    
   }
 
-  makeDeposit(updatedUser:any){
+  makeDeposit(updatedUser:DepositDTO){
     let url:string = environment.baseBackendUrl + "user/deposit";
     return this.http.patch<User>(url,updatedUser);
 

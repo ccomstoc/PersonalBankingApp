@@ -14,6 +14,7 @@ import { SetCategoryDTO } from '../../../models/DTO/SetCategoryDTO.type';
 import { transition } from '@angular/animations';
 import { CategoryWithStats } from '../../../models/CategoryWithStats.type';
 import { Category } from '../../../models/Category.type';
+import { CreateCategoryDTO } from '../../../models/DTO/CreateCategoryDTO';
 
 @Component({
   selector: 'app-catagorize',
@@ -33,6 +34,9 @@ export class CatagorizeComponent implements OnDestroy, OnInit,OnChanges{
   currentUser;
   uncatTransactionList;
   categoryTable;
+  spendingCategoryTable;
+  incomeCategoryTable;
+
   
     constructor(){
 
@@ -43,6 +47,9 @@ export class CatagorizeComponent implements OnDestroy, OnInit,OnChanges{
       this.currentUser = signal<User>(tempUser);
       this.uncatTransactionList = signal<Array<Transaction>>([])
       this.categoryTable = signal<Array<CategoryWithStats>>([]);
+
+      this.spendingCategoryTable = signal<Array<CategoryWithStats>>([]);
+      this.incomeCategoryTable = signal<Array<CategoryWithStats>>([]);
 
 
       effect(() =>{//update when user signal is changed, user signal is changed after refesh user call back function is run
@@ -73,9 +80,9 @@ export class CatagorizeComponent implements OnDestroy, OnInit,OnChanges{
       this.destroy$.complete();
     }
 
-    createCategory(categoryName:string){
+    createCategory(catDTO:CreateCategoryDTO){
       //console.log
-      this.categoryService.createCategory(categoryName,this.currentUser().userId).pipe(
+      this.categoryService.createCategory(catDTO).pipe(
         takeUntil(this.destroy$),
         catchError((err) => {
           console.log(err);
@@ -121,7 +128,9 @@ export class CatagorizeComponent implements OnDestroy, OnInit,OnChanges{
           throw err;
         })
       ).subscribe((transactionList) =>{
+        let orderedList = transactionList.sort();
         this.uncatTransactionList.set(transactionList);
+        
         //this is logged before table doubling bug
         //console.log("TransactionList:")
         //console.log(transactionList)
@@ -146,6 +155,7 @@ export class CatagorizeComponent implements OnDestroy, OnInit,OnChanges{
           
           updatedList[setCategoryDTO.uncatListIndex] = updatedTransaction;
           this.uncatTransactionList.set(updatedList);
+          //this.updateUncatagorizedTransactions();
         }
         else{
           throw new Error("uncatTransactions index not provided when required ");
@@ -161,6 +171,8 @@ export class CatagorizeComponent implements OnDestroy, OnInit,OnChanges{
       let userCategories = currentUser.userCategories
       //function works by adding to current array, so need to reset
       this.categoryTable.set([])
+      this.spendingCategoryTable.set([])
+      this.incomeCategoryTable.set([])
       
       
       for(let i = 0; i < userCategories.length; i++){
@@ -175,14 +187,20 @@ export class CatagorizeComponent implements OnDestroy, OnInit,OnChanges{
           })
         ).subscribe((catStatistics => {
           //If createCattable is called twice in quick succession, the clear table will not take effect properly
-          let tableEntry = {
+          let tableEntry:CategoryWithStats = {
             categoryId:userCategories[i].categoryId,
             name:userCategories[i].name,
             userId:userCategories[i].userId,
             countTransaction:catStatistics.countTransaction,
-            sumAmount:catStatistics.sumAmount
+            sumAmount:catStatistics.sumAmount,
+            type:userCategories[i].type
           }
           this.categoryTable().push(tableEntry);
+          if(userCategories[i].type == "INCOME")
+              this.incomeCategoryTable().push(tableEntry);
+          else if((userCategories[i].type == "SPENDING"))
+              this.spendingCategoryTable().push(tableEntry);
+          
           
           console.log(this.categoryTable()[this.categoryTable().length-1].name + " cat Table above")
         }))

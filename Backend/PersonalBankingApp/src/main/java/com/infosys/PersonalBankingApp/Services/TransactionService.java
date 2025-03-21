@@ -6,6 +6,7 @@ import com.infosys.PersonalBankingApp.DAOs.UserDAO;
 import com.infosys.PersonalBankingApp.Exceptions.*;
 import com.infosys.PersonalBankingApp.Models.Category;
 import com.infosys.PersonalBankingApp.Models.DTOs.CategoryStatisticsDTO;
+import com.infosys.PersonalBankingApp.Models.Enums.TransactionType;
 import com.infosys.PersonalBankingApp.Models.Transaction;
 import com.infosys.PersonalBankingApp.Models.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +64,9 @@ public class TransactionService {
 
     }
 
+
     public Transaction createTransaction(Transaction transaction) throws UserNotFoundException{
+
         Optional<User> user;
         if (transaction.getUser() == null){
             user = uDAO.findById(transaction.getUserId());

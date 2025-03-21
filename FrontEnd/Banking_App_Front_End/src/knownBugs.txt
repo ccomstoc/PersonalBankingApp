@@ -1,7 +1,12 @@
 IN_PROGRESS
     sort card claims all are sorted at end, even if you skipped some, takes page refresh to show again
+        We can send a signal, causing the transaction list to be updated, which is does
+        Right now we are at last element, it is setting the index to zero, then the template is checking for aither an undefined list, or a value at length
+        but we dont have either of those, so we need to check what transaction list is in odrder to not render is 
     delete transaction? 
     sort table responces
+
+    At the
 
 
 

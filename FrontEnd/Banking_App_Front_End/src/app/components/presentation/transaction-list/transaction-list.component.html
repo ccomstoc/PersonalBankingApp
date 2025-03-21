@@ -23,23 +23,23 @@
             <td >{{row.date}}</td>
             <td 
               [ngClass]="{
-                'text-success': (row.type == 'DEPOSIT')
+                'text-success': (row.type == 'INCOME')
               }"
               >
-              <div *ngIf="! (row.type == 'DEPOSIT') ">
+              <div *ngIf="! (row.type == 'INCOME') ">
                 -{{row.amount | currency}} 
               </div>
-              <div *ngIf="(row.type == 'DEPOSIT') ">
+              <div *ngIf="(row.type == 'INCOME') ">
                 +{{row.amount | currency}} 
               </div>
                 
             </td>
             <td >{{row.description}}</td>
             <td *ngIf = "row.paid">
-                <div *ngIf="! (row.type == 'DEPOSIT') ">
+                <div *ngIf="! (row.type == 'INCOME') ">
                 Paid on: {{row.paidOn}}
               </div>
-              <div *ngIf="(row.type == 'DEPOSIT') ">
+              <div *ngIf="(row.type == 'INCOME') ">
                 Completed
               </div>
             </td>

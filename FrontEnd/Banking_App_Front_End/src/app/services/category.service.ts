@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 
 import { Category } from '../models/Category.type';
 import { environment } from '../Config/properties';
+import { CreateCategoryDTO } from '../models/DTO/CreateCategoryDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -11,15 +12,12 @@ export class CategoryService {
 
     http = inject(HttpClient);
 
-    createCategory(catName:String, userId:number){
+    createCategory(catDTO:CreateCategoryDTO){
       console.log("Requesting new category")
       let url:string = environment.baseBackendUrl + "category";
-      let category = {
-          "name":catName,
-          "userId": userId
-      }
+
       
-      return this.http.post<Category>(url,category);
+      return this.http.post<Category>(url,catDTO);
     }
     deleteCategory(catId:number){
       let url:string = environment.baseBackendUrl +"category/" + catId;
