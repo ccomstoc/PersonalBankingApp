@@ -5,10 +5,11 @@ import { CategoryService } from '../../../services/category.service';
 import { catchError, Subject } from 'rxjs';
 import { CreateCategoryDTO } from '../../../models/DTO/CreateCategoryDTO';
 import { SetCategoryDTO } from '../../../models/DTO/SetCategoryDTO.type';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-create-category',
-  imports: [FormsModule],
+  imports: [FormsModule,CommonModule],
   templateUrl: './create-category.component.html',
   styleUrl: './create-category.component.css'
 })
@@ -21,11 +22,19 @@ export class CreateCategoryComponent {
 
   categoryService = inject(CategoryService);
   categoryType!:string;
-
   categoryName!:string;
+
+  missingValue:boolean = false;
 
   //Lift to parent
   createCategory(){
+    this.missingValue = false;
+
+    if(!this.categoryName || !this.categoryType) {
+      this.missingValue = true;
+      return;
+    }
+
 
     let catDTO:CreateCategoryDTO = {
       name:this.categoryName,

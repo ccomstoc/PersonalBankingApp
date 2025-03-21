@@ -3,6 +3,13 @@ IN_PROGRESS
         We can send a signal, causing the transaction list to be updated, which is does
         Right now we are at last element, it is setting the index to zero, then the template is checking for aither an undefined list, or a value at length
         but we dont have either of those, so we need to check what transaction list is in odrder to not render is 
+
+
+
+    still have the above bug but now in odd circumstances
+        updateTransactions is running before assign category
+    When you go back to assign an already assigned value, it reassignes it, but does not update correctly in table
+        This is tricky bc the table refreshes when uncatTransactionList does 
     delete transaction? 
     sort table responces
 

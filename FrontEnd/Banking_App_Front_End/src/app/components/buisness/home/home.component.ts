@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, effect, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { TransactionService } from '../../../services/transaction.service';
 import { catchError, Subject, Subscription, takeUntil } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -15,6 +15,7 @@ import { TransactionListComponent } from '../../presentation/transaction-list/tr
 import { TransferComponent } from "../../presentation/transfer/transfer.component";
 import { TransferDTO } from '../../../models/DTO/TransferDTO';
 import { DepositDTO } from '../../../models/DTO/DepositDTO';
+import { HttpErrorResponse } from '@angular/common/http';
 
 
 @Component({
@@ -36,10 +37,17 @@ export class HomeComponent implements OnInit, OnDestroy {
   //Signals
   transactions = signal<Array<Transaction>>([]);
   balance = signal<number>(0);
+  errorMessage:string = "";
   currentUser;
 
   constructor(){
     this.currentUser = signal<User>(this.authService.getCurrentUser());
+
+    effect(()=>{
+      
+      this.errorMessage = "";
+      console.log("ERRRRR " + this.errorMessage);
+    })
   }
 
   ngOnInit(): void {  
@@ -58,8 +66,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   payTransaction(id:number){
     this.transactionService.payTransaction(id).pipe(
       takeUntil(this.destroy$),
-      catchError((err) => {
-        console.log(err);
+      catchError((err:HttpErrorResponse) => {
+        this.errorMessage = (err.error);
+        console.log(err.error);
         throw err;
       })//Comment
     ).subscribe((newBalance) => {

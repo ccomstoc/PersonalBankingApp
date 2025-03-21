@@ -1,16 +1,19 @@
 
 <h2>Create Category</h2>
 
+    <div *ngIf="missingValue">
+        <p class="text-danger">Please enter all information</p>
+    </div>
     <div class="form-group col-md-6">
         <label for="inputName">Name</label>
-        <input type="text" class="form-control" id="inputName"  [(ngModel)] = "categoryName">
+        <input type="text" class="form-control" id="inputName" placeholder="Category Name" [(ngModel)] = "categoryName">
     </div>
     <div class="form-group col-md-6">
-        <label for="categoryType">Type</label>
-        <select class="form-control" id="categoryType" [(ngModel)]="categoryType">
-            <option value="SPENDING">Spending</option>
-            <option value="INCOME">Income</option>
+        <select class="form-select" aria-label="Default select example" [(ngModel)]="categoryType">
+            <option value="SPENDING">SPENDING</option>
+            <option value="INCOME">INCOME</option>
         </select>
     </div>
+
     <button class="btn btn-outline-success" (click)="createCategory()">Create</button>
 

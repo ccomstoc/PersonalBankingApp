@@ -60,7 +60,9 @@ export class CatagorizeComponent implements OnDestroy, OnInit,OnChanges{
           this.createCategoryTable(this.currentUser());
           console.log("EFFECT")
           console.log(JSON.stringify(this.currentUser()) + " !!!User updated!!!");
+          
         }
+
       })
     }
 
@@ -129,7 +131,8 @@ export class CatagorizeComponent implements OnDestroy, OnInit,OnChanges{
         })
       ).subscribe((transactionList) =>{
         let orderedList = transactionList.sort();
-        this.uncatTransactionList.set(transactionList);
+        this.uncatTransactionList.set(orderedList);
+        console.log("UPDATE LSIT \n" + JSON.stringify(this.uncatTransactionList()))
         
         //this is logged before table doubling bug
         //console.log("TransactionList:")
@@ -147,14 +150,28 @@ export class CatagorizeComponent implements OnDestroy, OnInit,OnChanges{
           throw err; 
         })
       ).subscribe((updatedTransaction) => {
-        this.refreshCategoryTable(updatedTransaction);//Way better preformance conpared to full user refresh
+        
+        
+        //But we need a full refresh when user reasigns, how do we detect a re-assign? 
 
         //Locally update the sort card list, because a full refresh would be inefficent, and previously assigned categories would be absent
         let updatedList = this.uncatTransactionList()
         if(setCategoryDTO.uncatListIndex != undefined){//Type check
-          
+            if(this.uncatTransactionList()[setCategoryDTO.uncatListIndex].category != null ){
+              //Category is already assigned meaning this is a re-assignment, so re-render table;
+              this.createCategoryTable();
+            }else {
+              //Way better preformance conpared to full user refresh
+              this.refreshCategoryTable(updatedTransaction);
+            }
+  
           updatedList[setCategoryDTO.uncatListIndex] = updatedTransaction;
           this.uncatTransactionList.set(updatedList);
+
+          //Will update transaction list if this is the last one being categorized
+          //Needed if you skips categorization
+          if(setCategoryDTO.uncatListIndex == updatedList.length-1)
+              this.updateUncatagorizedTransactions()
           //this.updateUncatagorizedTransactions();
         }
         else{
@@ -166,7 +183,7 @@ export class CatagorizeComponent implements OnDestroy, OnInit,OnChanges{
 
     }
 
-    createCategoryTable(currentUser:User){
+    createCategoryTable(currentUser:User = this.currentUser()){
 
       let userCategories = currentUser.userCategories
       //function works by adding to current array, so need to reset
@@ -196,10 +213,18 @@ export class CatagorizeComponent implements OnDestroy, OnInit,OnChanges{
             type:userCategories[i].type
           }
           this.categoryTable().push(tableEntry);
-          if(userCategories[i].type == "INCOME")
+
+          //Sorting here should not be too intensive as categories will not be abundant, but not the best place for it
+          if(userCategories[i].type == "INCOME"){
               this.incomeCategoryTable().push(tableEntry);
-          else if((userCategories[i].type == "SPENDING"))
+              this.incomeCategoryTable.set([...this.incomeCategoryTable()].sort((a, b) =>
+                a.name.localeCompare(b.name)));
+          }
+          else if((userCategories[i].type == "SPENDING")){
               this.spendingCategoryTable().push(tableEntry);
+              this.spendingCategoryTable.set([...this.spendingCategoryTable()].sort((a, b) =>
+                a.name.localeCompare(b.name)));
+          }
           
           
           console.log(this.categoryTable()[this.categoryTable().length-1].name + " cat Table above")

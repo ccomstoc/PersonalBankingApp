@@ -92,8 +92,9 @@ export class SortCardComponent implements OnChanges, OnInit{
 
 
     }
-    this.incomeCategoryButtonsSignal.set(categoryButtons);
-
+    console.log("Income buttons" + spendingCategoryButtons)
+    this.incomeCategoryButtonsSignal.set(incomeCategoryButtons);
+    categoryRowIndex = 0;
     skiped = 0;
     for(let i = 0; i<this.currentUser().userCategories.length; i++){
       if(this.currentUser().userCategories[i].type != "SPENDING"){
@@ -102,13 +103,14 @@ export class SortCardComponent implements OnChanges, OnInit{
 
       if((i-skiped)%4 == 0 && (i-skiped) != 0){
           categoryRowIndex++;
-          incomeCategoryButtons.push([]);
+          spendingCategoryButtons.push([]);
       }
-      incomeCategoryButtons[categoryRowIndex].push(this.currentUser().userCategories[i]);
+      spendingCategoryButtons[categoryRowIndex].push(this.currentUser().userCategories[i]);
 
 
     }
-    this.incomeCategoryButtonsSignal.set(categoryButtons);
+    this.spendingCategoryButtonsSignal.set(spendingCategoryButtons);
+    console.log("Spending buttons" + spendingCategoryButtons)
     
 
   }

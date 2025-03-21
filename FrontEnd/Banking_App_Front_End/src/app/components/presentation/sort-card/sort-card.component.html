@@ -33,7 +33,7 @@
             </h6>
           </div>
           <!-- Categorize Buttons -->
-          <div *ngFor="let outerArray of categoryButtonsSignal()">
+          <div *ngFor="let outerArray of (  getCurrentTransaction().type == 'INCOME' ? incomeCategoryButtonsSignal() : spendingCategoryButtonsSignal() )">
             <div class="d-flex flex-wrap mb-2">
                 <ng-container *ngFor="let category of outerArray">
                   <button *ngIf="category.type ===  getCurrentTransaction().type"
