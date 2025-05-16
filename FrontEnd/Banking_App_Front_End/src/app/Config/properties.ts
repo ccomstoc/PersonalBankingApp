@@ -1,3 +1,3 @@
 export const environment = {
-    baseBackendUrl: 'http://192.168.1.136:8080/' 
+    baseBackendUrl: 'http://192.168.1.178:8080/' 
   };

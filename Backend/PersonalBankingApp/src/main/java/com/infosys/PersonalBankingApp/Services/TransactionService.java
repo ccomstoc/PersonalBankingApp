@@ -106,6 +106,10 @@ public class TransactionService {
         return tDAO.findByUserUserIdAndCategory(userId,null);
 
     }
+    public List<Transaction> findByCategoryId(int categoryId){
+        return tDAO.findByCategoryCategoryId(categoryId);
+
+    }
 
     public CategoryStatisticsDTO getCategoryStatistics(int categoryId){
 
@@ -121,4 +125,6 @@ public class TransactionService {
         //if()
         return new CategoryStatisticsDTO(num,amount) ;
     }
+
+
 }
